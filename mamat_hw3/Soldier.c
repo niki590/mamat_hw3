@@ -56,7 +56,7 @@ PSOLDIER Soldier_Duplicate(PSOLDIER Soldier)
 		printf(ARG_ERR_MSG);
 		return NULL;
 	}
-	PSOLDIER New_Soldier = Soldier_Create(Soldier->POS, Soldier->ID);
+	PSOLDIER New_Soldier = Soldier_Create(Soldier->ID, Soldier->POS);
 	if (New_Soldier == NULL) {
 		printf(MALLOC_ERR_MSG);
 		return NULL;

@@ -12,5 +12,4 @@ void APC_Print(PAPC nag);
 PSOLDIER APC_Pop(PAPC apc);
 PAPC APC_Duplicate(PAPC old);
 void APC_Delete(PAPC apc);
-
 #endif

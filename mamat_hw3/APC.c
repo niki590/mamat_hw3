@@ -15,18 +15,28 @@ typedef struct APC_t
 
 PAPC  APC_Create(char* id)
 {
+	if (id == NULL)
+	{
+		printf(ARG_ERR_MSG);
+		return NULL;
+	}
 	if ((id == NULL) || (strlen(id)>MAX_ID_LENGTH))
 	{
 		printf(ARG_ERR_MSG);
 		return NULL;
 	}
 	PAPC newapc = (PAPC)malloc(sizeof(APC));
-	if (newapc == NULL)
+	if (newapc == NULL)  //malloc check
 	{
 		printf(MALLOC_ERR_MSG);
 		return NULL;
 	}
 	newapc->ID = (char*)malloc(strlen(id) + 1);
+	if (newapc->ID == NULL)  //malloc check
+	{
+		printf(MALLOC_ERR_MSG);
+		return NULL;
+	} 
 	strcpy(newapc->ID, id);
 	newapc->top = -1;
 	newapc->capacity = APC_MAX_Soldiers;
@@ -38,6 +48,7 @@ PAPC  APC_Create(char* id)
 	}
 	for (int i = 0; i <= APC_MAX_Soldiers-1; i++)
 		newapc->array[i] = NULL;
+	return newapc;
 }
 int isFull(PAPC check)
 {
@@ -49,6 +60,11 @@ int isEmpty(PAPC check)
 }
 Result APC_Insert_Soldier(PAPC apc, PSOLDIER soldier)
 {
+	if ((apc == NULL)||(soldier==NULL))
+	{
+		printf(ARG_ERR_MSG);
+		return FAILURE;
+	}
 	if (isFull(apc))
 	{
 		printf("Error: APC is Full\n");
@@ -60,6 +76,11 @@ Result APC_Insert_Soldier(PAPC apc, PSOLDIER soldier)
 }
 void APC_Print(PAPC nag)
 {
+	if (nag == NULL)
+	{
+		printf(ARG_ERR_MSG);
+		return ;
+	}
 	if (nag == NULL) {
 		printf(ARG_ERR_MSG);
 		return;
@@ -79,6 +100,11 @@ void APC_Print(PAPC nag)
 }
 PSOLDIER APC_Pop(PAPC apc)
 {
+	if (apc == NULL)
+	{
+		printf(ARG_ERR_MSG);
+		return NULL;
+	}
 	if (isEmpty(apc))
 	{
 		printf("Error: APc is Empty\n");
@@ -91,6 +117,11 @@ PSOLDIER APC_Pop(PAPC apc)
 }
 PAPC APC_Duplicate(PAPC old)
 {
+	if (old == NULL)
+	{
+		printf(ARG_ERR_MSG);
+		return NULL;
+	}
 	PAPC new = APC_Create(old->ID);
 	new->top = old->top;
 	new->capacity = old->capacity;
@@ -107,6 +138,11 @@ PAPC APC_Duplicate(PAPC old)
 }
 void APC_Delete(PAPC apc)
 {
+	if (apc == NULL)
+	{
+		printf(ARG_ERR_MSG);
+		return;
+	}
 	for (int i = 0; i<=apc->top; i++)
 		Soldier_Delete(apc->array[i]);
 	free(apc->array);
