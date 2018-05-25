@@ -2,14 +2,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "List.h"
-
 typedef struct Node_t
 {
 	Element data;
 	struct Node_t* next;
 	struct Node_t* prev;
 } NODE, *PNODE;
-
 typedef struct List_t 
 {
 	NODE* head;
@@ -18,9 +16,8 @@ typedef struct List_t
 	Free_Function free_func;
 	Compare_Function comp_func;
 	Print_Func print_func;
-	unsigned int size;
+	int size;
 } LIST;
-
 //******************************************************************************
 //* function name: List_Create 
 //* Description : Creates new linked list
@@ -67,7 +64,8 @@ void List_Delete(PLIST list)
 	for (int i = 0; i < list->size; i++)
 	{
 		next = curr->next;
-		list->free_func(curr);
+		list->free_func(curr->data);
+		free(curr);
 		curr = next;
 	}
 	free(list);
@@ -88,11 +86,10 @@ void List_Print(PLIST list)
 	PNODE curr = list->head;
 	for (int i = 0; i < list->size; i++)
 	{
-		list->print_func(curr);
+		list->print_func(curr->data);
 		curr = curr->next;
 	}
 }
-
 //******************************************************************************
 //* function name: List_Add_Elem
 //* Description : adds an item given to the end of list
@@ -113,12 +110,15 @@ Result List_Add_Elem(PLIST list, Element item)
 		return FAILURE;
 	}
 	new_node->next = NULL;
-	list->iter = list->head;
-	for (int i = 0; i < list->size; i++)
-		list->iter = list->iter->next;
-	assert(list->iter->next == NULL);
-	list->iter->next = new_node;
-	new_node->prev = list->iter;
+	PNODE save = NULL;
+	save = list->head;
+	for (int i = 0; i < list->size-1; i++)
+		save = save->next;
+	if (save == NULL)
+		list->head = new_node;
+	else
+		save->next = new_node;
+	new_node->prev = save;
 	list->size++;
 	new_node->data = list->copy_func(item);
 	if (new_node->data == NULL)
@@ -127,4 +127,131 @@ Result List_Add_Elem(PLIST list, Element item)
 		return FAILURE;
 	}
 	return SUCCESS;
+}
+//******************************************************************************
+//* function name: List_Remove_Elem
+//* Description : removes an item with same key as given from list
+//* Parameters: pointer to a list, a key 
+//* Return Value: result of removing 
+//******************************************************************************
+Result List_Remove_Elem(PLIST list, PKey item)
+{
+	if ((list == NULL) || (item == NULL))
+	{
+		printf(ARG_ERR_MSG);
+		return FAILURE;
+	}
+	PNODE save;
+	save = list->head;
+	for (int i = 0; i < list->size; i++)
+	{
+		if (list->comp_func(item, save->data))
+		{
+			PNODE back = save->prev;
+			PNODE forward =save->next;
+			list->free_func(save->data);
+			free(save);
+			list->size--;
+			back->next = forward;
+			forward->prev = back;
+			return SUCCESS;
+		}
+		save = save->next;
+	}
+	return FAILURE;
+}
+//******************************************************************************
+//* function name: List_Get_First
+//* Description : Returns the data in the first node of list
+//* Parameters: pointer to a list 
+//* Return Value: pointer to the data
+//******************************************************************************
+Element List_Get_First(PLIST list)
+{
+	list->iter = list->head;
+	if (list == NULL) 
+	{
+		printf(ARG_ERR_MSG);
+		return NULL;
+	}
+	if (list->head == NULL)
+	{
+		printf("no nodes in list");
+		return NULL;
+	}
+	return list->head->data;
+}
+//******************************************************************************
+//* function name: List_Get_Next
+//* Description : Returns the data in the next node(accroding to num of calls)
+//* Parameters: pointer to a list 
+//* Return Value: pointer to the data
+//******************************************************************************
+Element List_Get_Next(PLIST list)
+{
+	if (list == NULL)
+	{
+		printf(ARG_ERR_MSG);
+		return NULL;
+	}
+	if (list->iter->next == NULL)
+		return NULL;
+	list->iter = list->iter->next;
+	return list->iter->data;
+}
+//******************************************************************************
+//* function name: List_Duplicate
+//* Description : Duplicates the list and all its fields 
+//* Parameters: pointer to source list and pointer to destination list.
+//*				and bool  that indicate if malloc failed
+//* Return Value: NA
+//******************************************************************************
+void List_Duplicate(PLIST src, PLIST dst,bool mem_failed)
+{
+	if ((src == NULL)||(dst==NULL))
+	{
+		printf(ARG_ERR_MSG);
+		return;
+	}
+	PNODE curr = src->head;
+	PNODE duplc = NULL;
+	Result adding;
+	for (int i = 0; i < src->size; i++)
+	{
+		Element new1 = src->copy_func(curr->data);
+		if (new1 == NULL)
+		{
+			mem_failed = true;
+			return;
+		}
+		adding = List_Add_Elem(dst, new1);
+		if (adding == FAILURE)
+		{
+			mem_failed = true;
+			return;
+		}
+		curr = curr->next;
+	}
+}
+//******************************************************************************
+//* function name: List_Get_Elem
+//* Description : Recieves pointer to list and a key and returns the data that corresponds with it
+//* Parameters: pointer to the data and to the list 
+//* Return Value: pointer to 
+//******************************************************************************
+Element List_Get_Elem(PLIST list,PKey key)
+{
+	if ((list == NULL)||(key==NULL))
+	{
+		printf(ARG_ERR_MSG);
+		return NULL;
+	}
+	PNODE curr = list->head;
+	for (int i = 0; i < list->size; i++)
+	{
+		if (list->comp_func(curr->data, key))
+			return curr->data;
+		curr = curr->next;
+	}
+	return NULL;
 }

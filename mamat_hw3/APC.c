@@ -163,7 +163,7 @@ PSOLDIER APC_Pop(Element apc_t)
 //* Parameters: pointer to apc
 //* Return Value: pointer to the new duplicated apc
 //******************************************************************************
-PAPC APC_Duplicate(Element old_t)
+Element APC_Duplicate(Element old_t)
 {
 	PAPC old = (PAPC)old_t;
 	if (old == NULL)
@@ -204,4 +204,18 @@ void APC_Delete(Element apc_t)
 	free(apc->array);
 	free(apc->ID);
 	free(apc);
+}
+//******************************************************************************
+//* function name: APC_Compare
+//* Description : Compares two apc by id
+//* Parameters: pointeres to the apc's
+//* Return Value: bool
+//******************************************************************************
+bool APC_Compare(Element apc1_t,Element apc2_t)
+{
+	PAPC apc1 = (PAPC)apc1_t;
+	PAPC apc2 = (PAPC)apc2_t;
+	if (strcmp(apc1->ID, apc2->ID))
+		return true;
+	return false;
 }

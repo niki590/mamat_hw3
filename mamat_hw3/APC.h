@@ -10,6 +10,7 @@ int isEmpty(Element check);
 Result APC_Insert_Soldier(Element apc, Element soldier);
 void APC_Print(Element nag);
 PSOLDIER APC_Pop(Element apc);
-PAPC APC_Duplicate(Element old);
+Element APC_Duplicate(Element old);
 void APC_Delete(Element apc);
+bool APC_Compare(Element apc1_t, Element apc2_t);
 #endif

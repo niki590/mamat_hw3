@@ -10,5 +10,11 @@ typedef void(*Print_Func)(Element);
 PLIST List_Create(Copy_Function copy, Free_Function free, Compare_Function comp, Print_Func print);
 void List_Delete(PLIST list);
 void List_Print(PLIST list);
+Result List_Add_Elem(PLIST list, Element item);
+Result List_Remove_Elem(PLIST list, PKey item);
+Element List_Get_First(PLIST list);
+Element List_Get_Next(PLIST list);
+void List_Duplicate(PLIST src, PLIST dst, bool mem_failed);
+Element List_Get_Elem(PLIST list, PKey key);
 
 #endif
