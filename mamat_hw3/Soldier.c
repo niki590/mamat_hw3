@@ -9,8 +9,16 @@ typedef struct Soldier_t {
 	char* POS;
 }Soldier;
 
-PSOLDIER Soldier_Create(char *id, char *pos)
+//******************************************************************************
+//* function name :Soldier_Create
+//* Description :recieves a soldier id and position and creates a new user
+//* Parameters:ID number and soldier position
+//* Return Value: pointer to new soldier struct
+//******************************************************************************
+PSOLDIER Soldier_Create(Element id_t, Element pos_t)
 {
+	char* id = (char*)id_t;
+	char* pos = (char*)pos_t;
 	if (id == NULL)
 	{
 		printf(ARG_ERR_MSG);
@@ -28,9 +36,15 @@ PSOLDIER Soldier_Create(char *id, char *pos)
 	strcpy(new->ID, id);
 	return new;
 }
-
-void Soldier_Delete(PSOLDIER sold)
+//******************************************************************************
+//* function name :Soldier_Delete
+//* Description :recieves a pointer to soldier and deletes it
+//* Parameters: pointer to soldier
+//* Return Value: NA
+//******************************************************************************
+void Soldier_Delete(Element sold_t)
 {
+	PSOLDIER sold = (PSOLDIER)sold_t;
 	if (sold == NULL)
 	{
 		printf(ARG_ERR_MSG);
@@ -41,17 +55,32 @@ void Soldier_Delete(PSOLDIER sold)
 	free(sold);
 	return;
 }
-void Soldier_Print(PSOLDIER sold)
+//******************************************************************************
+//* function name :Soldier_Print
+//* Description :recieves a pointer to soldier and prints its stats
+//* Parameters: pointer to soldier
+//* Return Value: NA
+//******************************************************************************
+void Soldier_Print(Element sold_t)
 {
+	PSOLDIER sold = (PSOLDIER)sold_t;
 	if (sold == NULL)
 	{
 		printf(ARG_ERR_MSG);
 		return;
 	}
-	printf("%s , %s\n",sold->ID,sold->POS);
+	printf("%s , %s\n", sold->ID, sold->POS);
 }
-PSOLDIER Soldier_Duplicate(PSOLDIER Soldier)
+//******************************************************************************
+//* function name :Soldier_Duplicate
+//* Description :recieves a pointer to soldier and creates a duplicate of the soldier
+//in terms of same id and pos
+//* Parameters: pointer to soldier
+//* Return Value: pointer to soldier
+//******************************************************************************
+PSOLDIER Soldier_Duplicate(Element Soldier_t)
 {
+	PSOLDIER Soldier = (PSOLDIER)Soldier_t;
 	if (Soldier == NULL) {
 		printf(ARG_ERR_MSG);
 		return NULL;
@@ -63,6 +92,7 @@ PSOLDIER Soldier_Duplicate(PSOLDIER Soldier)
 	}
 	return New_Soldier;
 }
+
 
 
 

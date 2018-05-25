@@ -3,8 +3,9 @@
 #include "defs.h"
 
 typedef  struct Soldier_t* PSOLDIER;
-PSOLDIER Soldier_Duplicate(PSOLDIER Soldier);
-void Soldier_Print(PSOLDIER Soldier);
-PSOLDIER Soldier_Create(char *id, char *pos);
-void Soldier_Delete(PSOLDIER sold);
+PSOLDIER Soldier_Duplicate(Element Soldier_t);
+void Soldier_Print(Element Soldier_t);
+PSOLDIER Soldier_Create(Element id_t, Element pos_t);
+void Soldier_Delete(Element sold_t);
+
 #endif

@@ -120,9 +120,11 @@
   <ItemGroup>
     <ClInclude Include="APC.h" />
     <ClInclude Include="defs.h" />
+    <ClInclude Include="List.h" />
     <ClInclude Include="Soldier.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="List.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="APC.c" />
     <ClCompile Include="Soldier.c" />

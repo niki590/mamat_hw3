@@ -4,25 +4,14 @@
 #include <stdlib.h>
 #include "APC.h"
 
-void part1()
-{
-	PSOLDIER niki = Soldier_Create("niki", "1");
-	PSOLDIER alon = Soldier_Create("alon", "2");
-	PSOLDIER ofry = Soldier_Create("ofry", "3");
-	PAPC brauda = APC_Create("Bradua");
-	APC_Insert_Soldier(brauda, niki);
-	APC_Insert_Soldier(brauda, alon);
-	APC_Insert_Soldier(brauda, ofry);
-	PSOLDIER pop = APC_Pop(brauda);
-	APC_Print(brauda);
-}
-/*
-*/
+
+
 void part2()
 {
 	PSOLDIER niki = Soldier_Create("niki", "1");
 	PSOLDIER new_niki = Soldier_Duplicate(niki);
 	Soldier_Print(new_niki);
+	Soldier_Delete(new_niki);
 	PSOLDIER alon = Soldier_Create("alon", "2");
 	PSOLDIER ofry = Soldier_Create("ofry", "3");
 	PSOLDIER ophiron = Soldier_Create("ophiron", "3");
@@ -30,6 +19,7 @@ void part2()
 	PSOLDIER ron = Soldier_Create("ron", "3");
 	PSOLDIER toomuch = Soldier_Create("toomuch", "1");
 	PAPC brauda = APC_Create("Bradua");
+	PSOLDIER lol=APC_Pop(brauda);
 	//check if possible to add APC with the same name in the prog
 	//result - failed - the apc was created without intervention
 	//needed solution: linked list that acounts for all names given
@@ -52,6 +42,7 @@ void part2()
 	//result: succeeded
 	PAPC brauda2 = APC_Duplicate(brauda);
 	PSOLDIER pop = APC_Pop(brauda);
+	Soldier_Delete(pop);
 	APC_Print(brauda);
 	APC_Print(brauda2);
 	APC_Delete(brauda);

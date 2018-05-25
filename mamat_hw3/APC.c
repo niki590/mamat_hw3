@@ -12,9 +12,15 @@ typedef struct APC_t
 	int capacity;
 	PSOLDIER* array;
 }APC;
-
-PAPC  APC_Create(char* id)
+//******************************************************************************
+//* function name: APC_Create 
+//* Description : Creates apc
+//* Parameters: the ID of apc as a char*
+//* Return Value: pointer to the apc created
+//******************************************************************************
+PAPC  APC_Create(Element apc_id)
 {
+	char* id = (char*)apc_id;
 	if (id == NULL)
 	{
 		printf(ARG_ERR_MSG);
@@ -50,16 +56,38 @@ PAPC  APC_Create(char* id)
 		newapc->array[i] = NULL;
 	return newapc;
 }
-int isFull(PAPC check)
+//******************************************************************************
+//* function name: isFull
+//* Description : check if apc is full
+//* Parameters: pointer to apc
+//* Return Value: 1 for full, 0 for not full
+//******************************************************************************
+int isFull(Element check_t)
 {
+	PAPC check = (PAPC)check_t;
 	return check->top == check->capacity - 1;
 }
-int isEmpty(PAPC check)
+//******************************************************************************
+//* function name: isEmpty
+//* Description : check if apc is empty
+//* Parameters: pointer to apc
+//* Return Value: 1 for empty, 0 for not empty
+//******************************************************************************
+int isEmpty(Element check_t)
 {
+	PAPC check = (PAPC)check_t;
 	return check->top == (-1);
 }
-Result APC_Insert_Soldier(PAPC apc, PSOLDIER soldier)
+//******************************************************************************
+//* function name: APC_Insert_Soldier
+//* Description : inserts existing soldier into given apc
+//* Parameters: pointer to apc, pointer to soldier
+//* Return Value: SUCCESS or FAILURE of inserting
+//******************************************************************************
+Result APC_Insert_Soldier(Element apc_t, Element soldier_t)
 {
+	PAPC apc = (PAPC)apc_t;
+	PSOLDIER soldier = (PSOLDIER)soldier_t;
 	if ((apc == NULL)||(soldier==NULL))
 	{
 		printf(ARG_ERR_MSG);
@@ -74,8 +102,15 @@ Result APC_Insert_Soldier(PAPC apc, PSOLDIER soldier)
 	apc->array[apc->top] = soldier;
 	return SUCCESS;
 }
-void APC_Print(PAPC nag)
+//******************************************************************************
+//* function name: APC_Print
+//* Description : Prints all the needed fields of given apc
+//* Parameters: pointer to apc
+//* Return Value: NA
+//******************************************************************************
+void APC_Print(Element nag_t)
 {
+	PAPC nag = (PAPC)nag_t;
 	if (nag == NULL)
 	{
 		printf(ARG_ERR_MSG);
@@ -98,8 +133,15 @@ void APC_Print(PAPC nag)
 		Soldier_Print(nag->array[k - i]);
 	}
 }
-PSOLDIER APC_Pop(PAPC apc)
+//******************************************************************************
+//* function name: APC_Pop
+//* Description : Pop the last in top of apc stack and return pointer to him
+//* Parameters: pointer to apc
+//* Return Value: pointer to popped soldier
+//******************************************************************************
+PSOLDIER APC_Pop(Element apc_t)
 {
+	PAPC apc = (PAPC)apc_t;
 	if (apc == NULL)
 	{
 		printf(ARG_ERR_MSG);
@@ -115,8 +157,15 @@ PSOLDIER APC_Pop(PAPC apc)
 	(apc->top)--;
 	return save;
 }
-PAPC APC_Duplicate(PAPC old)
+//******************************************************************************
+//* function name: APC_Duplicate
+//* Description : Duplicate given apc and all the fields of it
+//* Parameters: pointer to apc
+//* Return Value: pointer to the new duplicated apc
+//******************************************************************************
+PAPC APC_Duplicate(Element old_t)
 {
+	PAPC old = (PAPC)old_t;
 	if (old == NULL)
 	{
 		printf(ARG_ERR_MSG);
@@ -136,8 +185,15 @@ PAPC APC_Duplicate(PAPC old)
 	}
 	return new;
 }
-void APC_Delete(PAPC apc)
+//******************************************************************************
+//* function name: APC_Delete
+//* Description : Delete given apc and all its fields
+//* Parameters: pointer to apc
+//* Return Value: NA
+//******************************************************************************
+void APC_Delete(Element apc_t)
 {
+	PAPC apc = (PAPC)apc_t;
 	if (apc == NULL)
 	{
 		printf(ARG_ERR_MSG);
@@ -147,4 +203,5 @@ void APC_Delete(PAPC apc)
 		Soldier_Delete(apc->array[i]);
 	free(apc->array);
 	free(apc->ID);
+	free(apc);
 }
