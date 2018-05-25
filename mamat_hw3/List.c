@@ -214,17 +214,10 @@ void List_Duplicate(PLIST src, PLIST dst,bool mem_failed)
 		return;
 	}
 	PNODE curr = src->head;
-	PNODE duplc = NULL;
 	Result adding;
 	for (int i = 0; i < src->size; i++)
 	{
-		Element new1 = src->copy_func(curr->data);
-		if (new1 == NULL)
-		{
-			mem_failed = true;
-			return;
-		}
-		adding = List_Add_Elem(dst, new1);
+		adding = List_Add_Elem(dst, curr->data);
 		if (adding == FAILURE)
 		{
 			mem_failed = true;

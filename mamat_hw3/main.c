@@ -78,7 +78,10 @@ void part3()
 	List_Duplicate(first, second,mem_failed);
 	List_Delete(first);
 	List_Print(second);
-	
+	List_Delete(second);
+	APC_Delete(brauda);
+	APC_Delete(brauda2);
+
 }
 
 int main()
