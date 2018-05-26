@@ -211,11 +211,27 @@ void APC_Delete(Element apc_t)
 //* Parameters: pointeres to the apc's
 //* Return Value: bool
 //******************************************************************************
-bool APC_Compare(Element apc1_t,Element apc2_t)
+bool APC_Compare(Element apc1_t,Element name_t)
 {
 	PAPC apc1 = (PAPC)apc1_t;
-	PAPC apc2 = (PAPC)apc2_t;
-	if (strcmp(apc1->ID, apc2->ID))
+	char* name = (char*)name_t;
+	if (!strcmp(apc1->ID, name))
 		return true;
 	return false;
+}
+
+//******************************************************************************
+//* function name: APC_soldier_count
+//* Description : returs num of sold' in apc
+//* Parameters: pointer to apc
+//* Return Value: num of sold'
+//******************************************************************************
+int APC_soldier_count(PAPC nag)
+{
+	if (nag == NULL)
+	{
+		printf(ARG_ERR_MSG);
+		return -1;
+	}
+	return (nag->top + 1);
 }

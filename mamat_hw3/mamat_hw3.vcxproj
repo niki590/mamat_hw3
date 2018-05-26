@@ -122,12 +122,14 @@
     <ClInclude Include="defs.h" />
     <ClInclude Include="List.h" />
     <ClInclude Include="Soldier.h" />
+    <ClInclude Include="Squad.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="List.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="APC.c" />
     <ClCompile Include="Soldier.c" />
+    <ClCompile Include="Squad.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

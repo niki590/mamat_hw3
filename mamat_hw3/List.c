@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -115,7 +116,10 @@ Result List_Add_Elem(PLIST list, Element item)
 	for (int i = 0; i < list->size-1; i++)
 		save = save->next;
 	if (save == NULL)
+	{
 		list->head = new_node;
+		list->iter = list->head;
+	}
 	else
 		save->next = new_node;
 	new_node->prev = save;
@@ -145,15 +149,29 @@ Result List_Remove_Elem(PLIST list, PKey item)
 	save = list->head;
 	for (int i = 0; i < list->size; i++)
 	{
-		if (list->comp_func(item, save->data))
+		if (list->comp_func(save->data, item))
 		{
 			PNODE back = save->prev;
 			PNODE forward =save->next;
 			list->free_func(save->data);
 			free(save);
 			list->size--;
-			back->next = forward;
-			forward->prev = back;
+			if (list->size == 0)	   //only 1 item in list
+				list->head = NULL;
+			else if (back == NULL)	   //deleting first item in list
+			{
+				list->head = forward;
+				forward->prev = NULL;
+			}
+			else if (forward == NULL)   //deleting last item in list
+			{
+				back->next = forward;
+			}
+			else						//deleting any other item	
+			{
+				back->next = forward;
+				forward->prev = back;
+			}
 			return SUCCESS;
 		}
 		save = save->next;
@@ -232,9 +250,9 @@ void List_Duplicate(PLIST src, PLIST dst,bool mem_failed)
 //* Parameters: pointer to the data and to the list 
 //* Return Value: pointer to 
 //******************************************************************************
-Element List_Get_Elem(PLIST list,PKey key)
+Element List_Get_Elem(PLIST list, PKey key)
 {
-	if ((list == NULL)||(key==NULL))
+	if ((list == NULL) || (key == NULL))
 	{
 		printf(ARG_ERR_MSG);
 		return NULL;
@@ -247,4 +265,64 @@ Element List_Get_Elem(PLIST list,PKey key)
 		curr = curr->next;
 	}
 	return NULL;
+}
+//******************************************************************************
+//* function name: List_Get_Copy
+//* Description : Recieves pointer to list and returns its copy function
+//* Parameters: pointer to the list 
+//* Return Value: pointer to copy func
+//******************************************************************************
+Copy_Function List_Get_Copy(PLIST list)
+{
+	if (list == NULL)
+	{
+		printf(ARG_ERR_MSG);
+		return NULL;
+	}
+	return list->copy_func;
+}
+//******************************************************************************
+//* function name: List_Get_Free
+//* Description : Recieves pointer to list and returns its delete function
+//* Parameters: pointer to the list 
+//* Return Value: pointer to free func
+//******************************************************************************
+Free_Function List_Get_Free(PLIST list)
+{
+	if (list == NULL)
+	{
+		printf(ARG_ERR_MSG);
+		return NULL;
+	}
+	return list->free_func;
+}
+//******************************************************************************
+//* function name: List_Get_Comp
+//* Description : Recieves pointer to list and returns its compare function
+//* Parameters: pointer to the list 
+//* Return Value: pointer to compare func
+//******************************************************************************
+Compare_Function List_Get_Comp(PLIST list)
+{
+	if (list == NULL)
+	{
+		printf(ARG_ERR_MSG);
+		return NULL;
+	}
+	return list->comp_func;
+}
+//******************************************************************************
+//* function name: List_Get_Print
+//* Description : Recieves pointer to list and returns its Print function
+//* Parameters: pointer to the list 
+//* Return Value: pointer to print func
+//******************************************************************************
+Print_Func List_Get_Print(PLIST list)
+{
+	if (list == NULL)
+	{
+		printf(ARG_ERR_MSG);
+		return NULL;
+	}
+	return list->print_func;
 }

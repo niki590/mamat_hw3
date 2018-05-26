@@ -16,5 +16,9 @@ Element List_Get_First(PLIST list);
 Element List_Get_Next(PLIST list);
 void List_Duplicate(PLIST src, PLIST dst, bool mem_failed);
 Element List_Get_Elem(PLIST list, PKey key);
+Copy_Function List_Get_Copy(PLIST list);
+Free_Function List_Get_Free(PLIST list);
+Compare_Function List_Get_Comp(PLIST list);
+Print_Func List_Get_Print(PLIST list);
 
 #endif

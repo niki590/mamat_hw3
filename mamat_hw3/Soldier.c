@@ -92,8 +92,22 @@ PSOLDIER Soldier_Duplicate(Element Soldier_t)
 	}
 	return New_Soldier;
 }
-
-
+//******************************************************************************
+//* function name :Soldier_Compare
+//* Description :recieves a pointer to soldier and id, checks if same id
+//* Parameters: pointer to soldier and id
+//* Return Value: true if same, flase otherwise
+//******************************************************************************
+bool Soldier_Compare(Element sol_t, Element id_t)
+{
+	char* id = (char*)id_t;
+	PSOLDIER sol = (PSOLDIER)sol_t;
+	if (!strcmp(sol->ID, id))
+	{
+		return true;
+	}
+	return false;
+}
 
 
 
