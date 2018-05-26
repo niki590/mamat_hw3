@@ -13,7 +13,7 @@ typedef void* PKey;
 #define MAX_INPUT_LINE 100			// for main input line
 #define APC_MAX_Soldiers 6			// for APC
 #define MAX_ID_LENGTH 8			    // for Structs IDs
-
+#define MAX_LINE_LENGTH 256  
 
 #define MALLOC_ERR_MSG "Error: Cant perform Malloc\n"
 #define ARG_ERR_MSG "Error: Function's Args Error\n"

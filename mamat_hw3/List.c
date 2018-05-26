@@ -326,3 +326,66 @@ Print_Func List_Get_Print(PLIST list)
 	}
 	return list->print_func;
 }
+
+void Special_Insert(PLIST list, char *cmd)
+{
+	PNODE new_node = (PNODE)malloc(sizeof(NODE));
+	if (new_node == NULL)
+	{
+		printf(MALLOC_ERR_MSG);
+		return;
+	}
+	PNODE new_node = (PNODE)malloc(sizeof(NODE));
+	new_node->data = (char*)malloc(strlen(cmd));
+	if (new_node->data == NULL)
+	{
+		printf(MALLOC_ERR_MSG);
+		return;
+	}
+	strcpy(new_node->data, cmd);
+	if (list->head == NULL)
+	{
+		list->head = new_node;
+		new_node->next = NULL;
+		new_node->prev = NULL;
+		return;
+	}
+	PNODE curr = list->head;
+	while ((curr->next != NULL) && (list->comp_func(cmd, curr->data)))
+		curr = curr->next; 
+	if (curr->next == NULL)
+	{
+		if (curr->prev == NULL)
+		{
+			if (list->comp_func(cmd, curr->data))
+			{
+				curr->next = new_node;
+				new_node->next = NULL;
+				new_node->prev = curr;
+				return;
+			}
+			else
+			{
+				list->head = new_node;
+				new_node->prev = NULL;
+				new_node->next = curr;
+				curr->prev = new_node;
+				return;
+			}
+		}
+		if (list->comp_func(cmd, curr->data))
+		{
+			new_node->prev = curr;
+			new_node->next = NULL;
+			curr->next = new_node;
+			return;
+		}
+	}
+	PNODE node1= curr->prev;
+	PNODE node2 = curr->next;
+	new_node->prev = node1;;
+	new_node->next = curr;
+	node1->next = new_node;
+	curr->prev = new_node;
+	return;
+}

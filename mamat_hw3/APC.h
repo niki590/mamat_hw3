@@ -14,4 +14,5 @@ Element APC_Duplicate(Element old);
 void APC_Delete(Element apc);
 bool APC_Compare(Element apc1_t, Element apc2_t);
 int APC_soldier_count(PAPC nag);
+bool APC_SoldExist(PAPC nag, char* id);
 #endif

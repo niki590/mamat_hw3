@@ -235,3 +235,23 @@ int APC_soldier_count(PAPC nag)
 	}
 	return (nag->top + 1);
 }
+//******************************************************************************
+//* function name: APC_SoldExist
+//* Description : returs if solider with given name exist in apc
+//* Parameters: pointer to apc and id of soldier
+//* Return Value: true for exist,false otherwise
+//******************************************************************************
+bool APC_SoldExist(PAPC nag,char* id)
+{
+	if ((nag == NULL)||(id==NULL))
+	{
+		printf(ARG_ERR_MSG);
+		return false;
+	}
+	for (int i = 0; i <= nag->top; i++)
+	{
+		if (Soldier_Compare(nag->array[i], id))
+			return true;
+	}
+	return false;
+}

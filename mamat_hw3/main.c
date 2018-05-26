@@ -2,59 +2,27 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "APC.h"
-#include "List.h"
+#include "Battlefield.h"
+#define TK " \n\t"
 
-
-
-/*void part2()
+void String_free(Element str_t)
 {
-	PSOLDIER niki = Soldier_Create("niki", "1");
-	PSOLDIER alon = Soldier_Create("alon", "2");
-	PSOLDIER ofry = Soldier_Create("ofry", "3");
-	PSOLDIER ophiron = Soldier_Create("ophiron", "3");
-	PSOLDIER shuli = Soldier_Create("shuli", "3");
-	PSOLDIER ron = Soldier_Create("ron", "3");
-	PAPC brauda = APC_Create("Bradua");
-	PSOLDIER lol=APC_Pop(brauda);
-	//check if possible to add APC with the same name in the prog
-	//result - failed - the apc was created without intervention
-	//needed solution: linked list that acounts for all names given
-	//so far - so its possible to check validity of name
-	//this is needed for both apcs and soldiers
-	PAPC brauda_nd = APC_Create("new_one");
-	APC_Insert_Soldier(brauda, niki);
-	APC_Insert_Soldier(brauda, alon);
-	APC_Insert_Soldier(brauda, ofry);
-	APC_Insert_Soldier(brauda, shuli);
-	APC_Insert_Soldier(brauda, ophiron);
-	APC_Insert_Soldier(brauda, ron);
-	PLIST first = List_Create(APC_Duplicate, APC_Delete, APC_Compare, APC_Print);
-	Result check = List_Add_Elem(first, brauda);
-	List_Print(first);
-	APC_Print(brauda);
-
-	//check is full operation
-	//result: succeeded
-	APC_Insert_Soldier(brauda, toomuch);
-	Soldier_Delete(toomuch);
-	APC_Print(brauda);
-	//check APC_Duplicate
-	//result: succeeded
-	PAPC brauda2 = APC_Duplicate(brauda);
-	PSOLDIER pop = APC_Pop(brauda);
-	Soldier_Delete(pop);
-	APC_Print(brauda);
-	APC_Print(brauda2);
-	APC_Delete(brauda);
-	APC_Delete(brauda2);
-	APC_Delete(brauda_nd);
-	//check print of empty apc - 
-	//outcome printed as function's args error
-	//according to doc - supposed to print
-	//:"Brauda_nd", Occupancy: 0/6"
+	char* str = (char*)str_t;
+	free(str);
 }
-*/
+
+bool String_compare(Element str1_t, Element str2_t)
+{
+	char* str1 = (char*)str1_t;
+	char* str2 = (char*)str2_t;
+	if(str1[0]>str2[0])
+		return true;
+	return false;
+}
+
+
+
+
 void part3()
 {
 	bool mem_failed = false;
@@ -96,8 +64,80 @@ void part3()
 
 }
 
+void part_4()
+{
+	bool mem_failed = false;
+	Result check;
+	PSQUAD nikigang = Squad_Create("nikigang", Soldier_Duplicate, Soldier_Delete, Soldier_Compare, Soldier_Print,
+		APC_Duplicate, APC_Delete, APC_Compare, APC_Print);
+	//Adding soldiers
+	Result sol1 = Squad_Add_Soldier(nikigang, "ohad1","1",mem_failed);
+	sol1 = Squad_Add_Soldier(nikigang, "ohad2", "1", mem_failed);
+	sol1 = Squad_Add_Soldier(nikigang, "ohad3", "1", mem_failed);
+	sol1 = Squad_Add_Soldier(nikigang, "ohad4", "1", mem_failed);
+	sol1 = Squad_Add_Soldier(nikigang, "itamar1","2", mem_failed);
+	sol1 = Squad_Add_Soldier(nikigang, "itamar2", "2", mem_failed);
+	sol1 = Squad_Add_Soldier(nikigang, "itamar3", "2", mem_failed);
+	sol1 = Squad_Add_Soldier(nikigang, "itamar4", "2", mem_failed);
+	sol1 = Squad_Add_Soldier(nikigang, "itamar5", "2", mem_failed);
+	sol1 = Squad_Add_Soldier(nikigang, "itamar6", "2", mem_failed);
+	//Adding apcs
+	Result apc1 = Squad_Add_APC(nikigang, "brauda1", mem_failed);
+	apc1 = Squad_Add_APC(nikigang, "brauda2", mem_failed);
+	apc1 = Squad_Add_APC(nikigang, "brauda3", mem_failed);
+	apc1 = Squad_Add_APC(nikigang, "brauda4", mem_failed);
+	apc1 = Squad_Add_APC(nikigang, "brauda5", mem_failed);
+
+	//Move sold into apcs
+	sol1 = Squad_Insert_Sold_APC(nikigang, "brauda1", "ohad1", mem_failed);
+	sol1 = Squad_Insert_Sold_APC(nikigang, "brauda1", "itamar1", mem_failed);
+	sol1 = Squad_Insert_Sold_APC(nikigang, "brauda1", "ohad2", mem_failed);
+	sol1 = Squad_Insert_Sold_APC(nikigang, "brauda1", "itamar2", mem_failed);
+	sol1 = Squad_Insert_Sold_APC(nikigang, "brauda1", "itamar3", mem_failed);
+	sol1 = Squad_Insert_Sold_APC(nikigang, "brauda1", "itamar4", mem_failed);
+	sol1 = Squad_Insert_Sold_APC(nikigang, "brauda1", "ohad3", mem_failed);
+	//********************************************************************************
+	Result pop1 = Squad_APC_Pop(nikigang, "brauda1",mem_failed);
+	//Squad_Print(nikigang);
+	//check squad duplicate squad delete functions
+	PSQUAD ofrygang = Squad_Duplicate(nikigang);
+	Squad_Delete(nikigang);
+	Result del1 = Squad_Delete_Soldier(ofrygang, "ohad3");
+	del1 = Squad_Delete_Soldier(ofrygang, "ohad1");
+	del1 = Squad_Delete_APC(ofrygang, "brauda3");
+	Squad_Print(ofrygang);
+	del1 = Squad_Delete_APC(ofrygang, "brauda1");
+	Squad_Print(ofrygang);
+	Squad_Delete(ofrygang);
+}
+
 int main()
 {
-	part3();
-	printf("WOHOHOHOHOHO\n");
+	PLIST cmd = List_Create(NULL, String_free, String_compare, NULL);
+	char line[MAX_LINE_LENGTH];
+	line[255] = '\0';
+	char *command;
+	while (fgets(line, MAX_LINE_LENGTH, stdin))
+	{
+		Special_Insert(line);
+
+	}
+
+
+
+	while (fgets(line, MAX_LINE_LENGTH, stdin))
+	{
+		command = strtok(line, TK);
+		char *splited[3];
+		for (int i = 0; i < 3; i++)
+			splited[i] = NULL;
+		int counter = 0;
+		if (command == NULL)
+			continue;
+		while ((command != NULL) && (counter<3))
+		{
+			splited[counter] = command;
+			command = strtok(NULL, TK);
+			counter++;
+		}
 }

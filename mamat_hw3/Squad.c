@@ -112,8 +112,6 @@ PSQUAD Squad_Duplicate(PSQUAD old_squ)
 		printf(MALLOC_ERR_MSG);
 		return NULL;
 	}
-	new_squ->ID = (char*)malloc(MAX_ID_LENGTH + 1);
-	strcpy(new_squ->ID, old_squ->ID);
 	bool mem_failed = false;
 	new_squ->size = old_squ->size;
 	List_Duplicate(old_squ->apc_list, new_squ->apc_list,mem_failed);
@@ -283,7 +281,6 @@ Result Squad_Delete_Soldier(PSQUAD squ, char* soldID)
 	else
 	{
 		List_Remove_Elem(squ->sold_list, soldID);
-		Soldier_Delete(exists);
 		squ->size--;
 	}
 	return SUCCESS;
@@ -304,15 +301,58 @@ Result Squad_Delete_APC(PSQUAD squ, char* apcID)
 	PAPC exists = List_Get_Elem(squ->apc_list, apcID);
 	if (exists == NULL)
 		return FAILURE;
-	else
+	squ->size -= APC_soldier_count(exists);
+	if (List_Remove_Elem(squ->apc_list, apcID))
+		return SUCCESS;
+	return FAILURE;
+}
+//******************************************************************************
+//* function name : Squad_SoldExist
+//* Description : checks if soldier with given name exists in  squad
+//* Parameters: pointer to squad and id of soldier
+//* Return Value: true if exist, false otherwise
+//******************************************************************************
+bool Squad_SoldExist(PSQUAD squ, char * id)
+{
+	if ((squ == NULL) || (id == NULL))
 	{
-		squ->size -= APC_soldier_count(exists);
-		if (List_Remove_Elem(squ->apc_list, apcID))
-			return SUCCESS;
+		printf(ARG_ERR_MSG);
+		return false;
 	}
+	if (List_Get_Elem(squ->sold_list, id) != NULL)
+		return true;
+	PAPC curr_apc= List_Get_First(squ->apc_list);
+	while (curr_apc != NULL)
+	{
+		if (APC_SoldExist(curr_apc, id))
+			return true;
+		curr_apc = List_Get_Next(squ->apc_list); 
+	}
+	return false;
 }
 
-
+//******************************************************************************
+//* function name : Squad_APCExist
+//* Description : checks if apc with given name exists in squad
+//* Parameters: pointer to squad and id of apc
+//* Return Value: true if exist, false otherwise
+//******************************************************************************
+bool Squad_APCExist(PSQUAD squ, char * id)
+{
+	if ((squ == NULL) || (id == NULL))
+	{
+		printf(ARG_ERR_MSG);
+		return false;
+	}
+	PAPC curr_apc = List_Get_First(squ->apc_list);
+	while (curr_apc != NULL)
+	{
+		if (APC_SoldExist(curr_apc, id))
+			return true;
+		curr_apc = List_Get_Next(squ->apc_list);
+	}
+	return false;
+}
 
 
 

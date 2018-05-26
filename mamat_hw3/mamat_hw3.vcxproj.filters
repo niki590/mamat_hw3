@@ -30,6 +30,12 @@
     <ClInclude Include="Squad.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="WarZone.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlefield.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Soldier.c">
@@ -45,6 +51,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Squad.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WarZone.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Battlefield.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

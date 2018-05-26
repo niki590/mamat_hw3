@@ -16,10 +16,12 @@ void Squad_Delete(PSQUAD squ);
 void Squad_Print(PSQUAD squ);
 PSQUAD Squad_Duplicate(PSQUAD old_squ);
 Result Squad_Add_Soldier(PSQUAD squ, char *id, char* pos, bool mem_failed);
+Result Squad_Add_APC(PSQUAD squ, char *id, bool mem_failed);
 Result Squad_Insert_Sold_APC(PSQUAD squ, char* apcID, char* soldID, bool mem_failed);
 Result Squad_APC_Pop(PSQUAD squ, char* apcID, bool mem_failed);
 Result Squad_Delete_Soldier(PSQUAD squ, char* soldID);
 Result Squad_Delete_APC(PSQUAD squ, char* apcID);
-
+bool Squad_SoldExist(PSQUAD squ, char * id);
+bool Squad_APCExist(PSQUAD squ, char * id);
 
 #endif
