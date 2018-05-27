@@ -4,14 +4,14 @@
 #include <stdlib.h>
 #include "Battlefield.h"
 #include "List.h"
-
-void Execute_Command(char *line);
-void Execute_List(PLIST cmd);
-
-
 #define TK " \n\t"
+//Static Vars used for main
 static PLIST Battlefield;
 
+//Declarations
+void Execute_Command(char *line,PLIST cmd);
+void Execute_List(PLIST cmd);
+//Functions for command list
 void String_free(Element str_t)
 {
 	char* str = (char*)str_t;
@@ -31,148 +31,74 @@ void String_print(Element line_t)
 	printf("%s\n", line);
 }
 
-void part3()
-{
-	bool mem_failed = false;
-	Result check;
-	PAPC returned;
-	PSOLDIER niki = Soldier_Create("niki", "1");
-	PSOLDIER alon = Soldier_Create("alon", "2");
-	PSOLDIER ofry = Soldier_Create("ofry", "3");
-	PSOLDIER ophiron = Soldier_Create("ophiron", "3");
-	PSOLDIER shuli = Soldier_Create("shuli", "3");
-	PSOLDIER ron = Soldier_Create("ron", "3");
-	PAPC brauda = APC_Create("A");
-	PAPC brauda2 = APC_Create("B");
-	APC_Insert_Soldier(brauda, niki);
-	APC_Insert_Soldier(brauda, alon);
-	APC_Insert_Soldier(brauda, ofry);
-	APC_Insert_Soldier(brauda, shuli);
-	APC_Insert_Soldier(brauda, ophiron);
-	APC_Insert_Soldier(brauda, ron);
-	PLIST first = List_Create(APC_Duplicate, APC_Delete, APC_Compare, APC_Print);
-	PLIST second = List_Create(APC_Duplicate, APC_Delete, APC_Compare, APC_Print);
-	check = List_Add_Elem(first, brauda);
-	check = List_Add_Elem(first, brauda2);
-	List_Duplicate(first, second, mem_failed);
-	check = List_Add_Elem(first, brauda); // this point first:A>B>A , second: A>B
-	returned = List_Get_First(first);
-	returned = List_Get_Next(first);
-	APC_Print(returned); //prints nagmash B (empty)
-	check = List_Remove_Elem(second, "A");
-	List_Print(second);  // second: B
-	check = List_Remove_Elem(second, "B");
-	List_Print(second);  // second: NA
-	List_Print(first);
-	List_Delete(first);
-	List_Print(second);
-	List_Delete(second);
-	APC_Delete(brauda);
-	APC_Delete(brauda2);
-
-}
-void part_4()
-{
-	bool mem_failed = false;
-	PSQUAD nikigang = Squad_Create("nikigang", Soldier_Duplicate, Soldier_Delete, Soldier_Compare, Soldier_Print,
-		APC_Duplicate, APC_Delete, APC_Compare, APC_Print);
-	//Adding soldiers
-	Result sol1 = Squad_Add_Soldier(nikigang, "ohad1","1",mem_failed);
-	sol1 = Squad_Add_Soldier(nikigang, "ohad2", "1", mem_failed);
-	sol1 = Squad_Add_Soldier(nikigang, "ohad3", "1", mem_failed);
-	sol1 = Squad_Add_Soldier(nikigang, "ohad4", "1", mem_failed);
-	sol1 = Squad_Add_Soldier(nikigang, "itamar1","2", mem_failed);
-	sol1 = Squad_Add_Soldier(nikigang, "itamar2", "2", mem_failed);
-	sol1 = Squad_Add_Soldier(nikigang, "itamar3", "2", mem_failed);
-	sol1 = Squad_Add_Soldier(nikigang, "itamar4", "2", mem_failed);
-	sol1 = Squad_Add_Soldier(nikigang, "itamar5", "2", mem_failed);
-	sol1 = Squad_Add_Soldier(nikigang, "itamar6", "2", mem_failed);
-	//Adding apcs
-	Result apc1 = Squad_Add_APC(nikigang, "brauda1", mem_failed);
-	apc1 = Squad_Add_APC(nikigang, "brauda2", mem_failed);
-	apc1 = Squad_Add_APC(nikigang, "brauda3", mem_failed);
-	apc1 = Squad_Add_APC(nikigang, "brauda4", mem_failed);
-	apc1 = Squad_Add_APC(nikigang, "brauda5", mem_failed);
-
-	//Move sold into apcs
-	sol1 = Squad_Insert_Sold_APC(nikigang, "brauda1", "ohad1", mem_failed);
-	sol1 = Squad_Insert_Sold_APC(nikigang, "brauda1", "itamar1", mem_failed);
-	sol1 = Squad_Insert_Sold_APC(nikigang, "brauda1", "ohad2", mem_failed);
-	sol1 = Squad_Insert_Sold_APC(nikigang, "brauda1", "itamar2", mem_failed);
-	sol1 = Squad_Insert_Sold_APC(nikigang, "brauda1", "itamar3", mem_failed);
-	sol1 = Squad_Insert_Sold_APC(nikigang, "brauda1", "itamar4", mem_failed);
-	sol1 = Squad_Insert_Sold_APC(nikigang, "brauda1", "ohad3", mem_failed);
-	//********************************************************************************
-	Result pop1 = Squad_APC_Pop(nikigang, "brauda1",mem_failed);
-	//Squad_Print(nikigang);
-	//check squad duplicate squad delete functions
-	PSQUAD ofrygang = Squad_Duplicate(nikigang);
-	Squad_Delete(nikigang);
-	Result del1 = Squad_Delete_Soldier(ofrygang, "ohad3");
-	del1 = Squad_Delete_Soldier(ofrygang, "ohad1");
-	del1 = Squad_Delete_APC(ofrygang, "brauda3");
-	Squad_Print(ofrygang);
-	del1 = Squad_Delete_APC(ofrygang, "brauda1");
-	Squad_Print(ofrygang);
-	Squad_Delete(ofrygang);
-}
-
-void Battlefield_Delete()
+//THE MAIN
+void Battlefield_Delete(PLIST cmd)
 {
 	List_Delete(Battlefield);
+	List_Delete(cmd);
 }
-
-
 void Get_Commands()
 {
 	PLIST cmd = List_Create(NULL, String_free, String_compare, String_print);
 	char line[MAX_LINE_LENGTH+1];
 	bool finished = false;
-	while (finished)
+	while (!finished)
 	{
 		if (!fgets(line, MAX_LINE_LENGTH, stdin))
-			finished = true; //end of commands
-		if (!strcmp(line, "Exit"))
 		{
-			Battlefield_Delete();
-			List_Delete(cmd);
+			finished = true; //end of commands
+			return;
+		}
+		char first[MAX_LINE_LENGTH + 1];
+		strcpy(first, line);
+		strtok(first, TK);
+		if (!strcmp(first, "Exit"))
+		{
+			Battlefield_Delete(cmd);
 			return ;
 		}
-		if (!strcmp(line, "Exe"))
+		else if (!strcmp(first,"Exe"))
 		{
 			Execute_List(cmd);
 			List_Delete(cmd);
 			cmd = List_Create(NULL, String_free, String_compare, String_print);
 		}
+		else
 		List_Special_Insert(cmd, line);
 	}
 }
-
 void Execute_List(PLIST cmd)
 {
 	char* line = (char*)malloc(MAX_LINE_LENGTH + 1);
 	if (line == NULL)
 	{
 		printf(MALLOC_ERR_MSG);
-		Battlefield_Delete();
+		Battlefield_Delete(cmd);
 	}
-	strcpy(line, List_Get_First(cmd));
-	if (line == NULL)
+	char* iter = List_Get_First(cmd);
+	if (iter == NULL)
 	{
 		printf("No Commands to Execute\n");
 		free(line);
 		return;
 	}
+	strcpy(line, iter);
 	while (line != NULL)
 	{
-		Execute_Command(line);
-		strcpy(line, List_Get_Next(cmd));
+		Execute_Command(line,cmd);
+		iter = List_Get_Next(cmd);
+		if (iter == NULL)
+		{
+			line = NULL;
+			continue;
+		}
+		strcpy(line, iter);
 	}
+	free(line);
 	printf("**********All Commands Executed**********\n\n");
 	return;
 }
-
-void Execute_Command(char *line)
+void Execute_Command(char *line,PLIST cmd)
 {
 	char *commands = strtok(line, TK);
 	char *splited[MAX_VALUES_CMD];
@@ -188,6 +114,7 @@ void Execute_Command(char *line)
 	if (!strcmp(splited[1], "Create_B"))
 	{
 		Battlefield = Battlefield_Create();
+		printf("Battlefield Created!\n");
 		return;
 	}
 	if (Battlefield == NULL)
@@ -244,7 +171,7 @@ void Execute_Command(char *line)
 		PWarZone wz = List_Get_Elem(Battlefield, splited[2]);
 		if (!WarZone_Add_Squad(wz, splited[3]))
 		{
-			Battlefield_Delete();
+			Battlefield_Delete(cmd);
 		}
 	}
 	else if (!strcmp(splited[1], "Del_Sq"))
@@ -278,11 +205,30 @@ void Execute_Command(char *line)
 			printf("Error: No Such Dest Squad\n");
 			return;
 		}
+		if (!Battlefield_Move_Squad(Battlefield, splited[2], splited[3], splited[4]))
+			Battlefield_Delete(cmd);
+
 
 	}
 	else if (!strcmp(splited[1], "Add_Sold"))
 	{
-
+		if (!Battlefield_WZ_Exist(Battlefield, splited[2]))
+		{
+			printf("Error: No Such War Zone\n");
+			return;
+		}
+		if (!Battlefield_Squad_Exist(Battlefield, splited[3]))
+		{
+			printf("Error: No Such Squad\n");
+			return;
+		}
+		if (Battlefield_SoldExist(Battlefield, splited[4]))
+		{
+			printf("Error: Soldier Already Exists\n");
+			return;
+		}
+		if (Battlefield_Add_Sold(Battlefield, splited[2], splited[3], splited[4], splited[5]))
+			Battlefield_Delete(cmd);
 	}
 	else if (!strcmp(splited[1], "Del_ Sold"))
 	{
@@ -308,23 +254,105 @@ void Execute_Command(char *line)
 	}
 	else if (!strcmp(splited[1], "Add_APC"))
 	{
-
+		if (!Battlefield_WZ_Exist(Battlefield, splited[2]))
+		{
+			printf("Error: No Such War Zone\n");
+			return;
+		}
+		if (!Battlefield_Squad_Exist(Battlefield, splited[3]))
+		{
+			printf("Error: No Such Squad\n");
+			return;
+		}
+		if (Battlefield_APCExist(Battlefield, splited[4]))
+		{
+			printf("Error: APC Already Exists\n");
+			return;
+		}
+		if (Battlefield_Add_APC(Battlefield, splited[2], splited[3], splited[4]))
+			Battlefield_Delete(cmd);
 	}
 	else if (!strcmp(splited[1], "Del_APC"))
 	{
-
+		if (!Battlefield_WZ_Exist(Battlefield, splited[2]))
+		{
+			printf("Error: No Such War Zone\n");
+			return;
+		}
+		if (!Battlefield_Squad_Exist(Battlefield, splited[3]))
+		{
+			printf("Error: No Such Squad\n");
+			return;
+		}
+		if (!Battlefield_APCExist(Battlefield, splited[4]))
+		{
+			printf("Error: No Such APC\n");
+			return;
+		}
+		PWarZone curr_wz = List_Get_Elem(Battlefield, splited[2]);
+		PLIST squ_list = WarZone_Get_Squ_List(curr_wz);
+		PSQUAD curr_squ = List_Get_Elem(squ_list, splited[3]);
+		Squad_Delete_APC(curr_squ, splited[4]);
+	}
+	else if (!strcmp(splited[1], "Sold_Insert"))
+	{
+		if (!Battlefield_WZ_Exist(Battlefield, splited[2]))
+		{
+			printf("Error: No Such War Zone\n");
+			return;
+		}
+		if (!Battlefield_Squad_Exist(Battlefield, splited[3]))
+		{
+			printf("Error: No Such Squad\n");
+			return;
+		}
+		if (!Battlefield_APCExist(Battlefield, splited[4]))
+		{
+			printf("Error: No Such APC\n");
+			return;
+		}
+		if (!Battlefield_SoldExist(Battlefield, splited[5]))
+		{
+			printf("Error: No Such Soldier\n");
+			return;
+		}
+		if (Battlefield_Sold_ToAPC(Battlefield, splited[2], splited[3], splited[4], splited[5]))
+			Battlefield_Delete(cmd);
 	}
 	else if (!strcmp(splited[1], "APC_Pop"))
 	{
-
+		if (!Battlefield_WZ_Exist(Battlefield, splited[2]))
+		{
+			printf("Error: No Such War Zone\n");
+			return;
+		}
+		if (!Battlefield_Squad_Exist(Battlefield, splited[3]))
+		{
+			printf("Error: No Such Squad\n");
+			return;
+		}
+		if (!Battlefield_APCExist(Battlefield, splited[4]))
+		{
+			printf("Error: No Such APC\n");
+			return;
+		}
+		PWarZone curr_wz = List_Get_Elem(Battlefield, splited[2]);
+		PLIST squ_list = WarZone_Get_Squ_List(curr_wz);
+		PSQUAD curr_squ = List_Get_Elem(squ_list, splited[3]);
+		bool mem_failed = false;
+		Squad_APC_Pop(curr_squ, splited[4], &mem_failed);
+		if (mem_failed)
+			Battlefield_Delete(cmd);
 	}
 	else if (!strcmp(splited[1], "Print"))
 	{
-
+		printf("Battlefield\n");
+		List_Print(Battlefield);
 	}
 	else 
 	{
 		printf("Error: Illegal Command\n");
+		return;
 	}
 }
 
@@ -332,5 +360,6 @@ void Execute_Command(char *line)
 int main()
 {
 	Battlefield = NULL;
-
+	Get_Commands();
+	return 0;
 }

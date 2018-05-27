@@ -10,6 +10,7 @@ typedef struct Squad {
 	int size;
 	char *ID;
 }SQUAD;
+
 //******************************************************************************
 //* function name: Squad_Create 
 //* Description : Creates new squad
@@ -114,13 +115,13 @@ PSQUAD Squad_Duplicate(PSQUAD old_squ)
 	}
 	bool mem_failed = false;
 	new_squ->size = old_squ->size;
-	List_Duplicate(old_squ->apc_list, new_squ->apc_list,mem_failed);
+	List_Duplicate(old_squ->apc_list, new_squ->apc_list,&mem_failed);
 	if (mem_failed)
 	{
 		printf(MALLOC_ERR_MSG);
 		return NULL;
 	}
-	List_Duplicate(old_squ->sold_list, new_squ->sold_list, mem_failed);
+	List_Duplicate(old_squ->sold_list, new_squ->sold_list,&mem_failed);
 	if (mem_failed)
 	{
 		printf(MALLOC_ERR_MSG);
@@ -134,7 +135,7 @@ PSQUAD Squad_Duplicate(PSQUAD old_squ)
 //* Parameters: pointer to squad,soldier id and pos, boolain that indicates if malloc failed
 //* Return Value: result of add
 //******************************************************************************
-Result Squad_Add_Soldier(PSQUAD squ, char *id,char* pos ,bool mem_failed)
+Result Squad_Add_Soldier(PSQUAD squ, char *id,char* pos ,Pbool mem_failed)
 {
 	if ((squ == NULL) || (id == NULL)||(pos==NULL))
 	{
@@ -145,13 +146,13 @@ Result Squad_Add_Soldier(PSQUAD squ, char *id,char* pos ,bool mem_failed)
 	if (new_sold == NULL)
 	{
 		printf(MALLOC_ERR_MSG);
-		mem_failed = true;
+		*mem_failed = true;
 		return FAILURE;
 	}
 	if (!List_Add_Elem(squ->sold_list, new_sold))
 	{
 		printf(MALLOC_ERR_MSG);
-		mem_failed = true;
+		*mem_failed = true;
 		return FAILURE;
 	}
 	Soldier_Delete(new_sold);
@@ -164,7 +165,7 @@ Result Squad_Add_Soldier(PSQUAD squ, char *id,char* pos ,bool mem_failed)
 //* Parameters: pointer to squad,apc id , boolain that indicates if malloc failed
 //* Return Value: result of add
 //******************************************************************************
-Result Squad_Add_APC(PSQUAD squ, char *id, bool mem_failed)
+Result Squad_Add_APC(PSQUAD squ, char *id, Pbool mem_failed)
 {
 	if ((squ == NULL) || (id == NULL))
 	{
@@ -175,13 +176,13 @@ Result Squad_Add_APC(PSQUAD squ, char *id, bool mem_failed)
 	if (new_apc == NULL)
 	{
 		printf(MALLOC_ERR_MSG);
-		mem_failed = true;
+		*mem_failed = true;
 		return FAILURE;
 	}
 	if (!List_Add_Elem(squ->apc_list, new_apc))
 	{
 		printf(MALLOC_ERR_MSG);
-		mem_failed = true;
+		*mem_failed = true;
 		return FAILURE;
 	}
 	APC_Delete(new_apc);
@@ -195,7 +196,7 @@ Result Squad_Add_APC(PSQUAD squ, char *id, bool mem_failed)
 //* Return Value: Success if soldier was pushed into apc stack
 //* and Failure else
 //******************************************************************************
-Result Squad_Insert_Sold_APC(PSQUAD squ, char* apcID, char* soldID, bool mem_failed)
+Result Squad_Insert_Sold_APC(PSQUAD squ, char* apcID, char* soldID, Pbool mem_failed)
 {
 	if ((squ == NULL) || (apcID == NULL) || (soldID == NULL))
 	{
@@ -211,7 +212,7 @@ Result Squad_Insert_Sold_APC(PSQUAD squ, char* apcID, char* soldID, bool mem_fai
 		PSOLDIER dup = Soldier_Duplicate(soldexists);
 		if (dup == NULL)
 		{
-			mem_failed = true;
+			*mem_failed = true;
 			printf(MALLOC_ERR_MSG);
 			return FAILURE;
 		}
@@ -232,7 +233,7 @@ Result Squad_Insert_Sold_APC(PSQUAD squ, char* apcID, char* soldID, bool mem_fai
 //* Parameters: pointer to squad and ID of apc, mem_failed indicator
 //* Return Value: Success if soldier was popped from given apc and Failure else
 //******************************************************************************
-Result Squad_APC_Pop(PSQUAD squ, char* apcID, bool mem_failed)
+Result Squad_APC_Pop(PSQUAD squ, char* apcID, Pbool mem_failed)
 {
 	if ((squ == NULL) || (apcID == NULL))
 	{
@@ -253,7 +254,8 @@ Result Squad_APC_Pop(PSQUAD squ, char* apcID, bool mem_failed)
 			Soldier_Delete(popped);
 			if (added == FAILURE)
 			{
-				mem_failed = true;
+				printf(MALLOC_ERR_MSG);
+				*mem_failed = true;
 				return FAILURE;
 			}
 			else

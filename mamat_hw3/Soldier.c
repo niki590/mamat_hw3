@@ -78,7 +78,7 @@ void Soldier_Print(Element sold_t)
 //* Parameters: pointer to soldier
 //* Return Value: pointer to soldier
 //******************************************************************************
-PSOLDIER Soldier_Duplicate(Element Soldier_t)
+Element Soldier_Duplicate(Element Soldier_t)
 {
 	PSOLDIER Soldier = (PSOLDIER)Soldier_t;
 	if (Soldier == NULL) {

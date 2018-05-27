@@ -60,6 +60,7 @@ bool Battlefield_WZ_Exist(PLIST battle, char * id)
 	}
 	return false;
 }
+
 //******************************************************************************
 //* function name: Battlefield_Squad_Exist
 //* Description : checks if squad with given name exist anywhere in battlefield
@@ -94,28 +95,117 @@ void Battlefield_Emergency(PLIST bf, PWarZone wz)
 	}
 	PWarZone next_wz = NULL;
 	PLIST emer_wz_squ_list = WarZone_Get_Squ_List(wz);
+	char* emer_eze_id = WarZone_Get_ID(wz);
 	PWarZone curr_wz = List_Get_First(bf);
-	if (WarZone_Compare(curr_wz, wz))
+	bool a = WarZone_Compare(curr_wz, emer_eze_id);
+	while ((curr_wz != NULL) && (!a))
 	{
 		curr_wz = List_Get_Next(bf);
+		a = WarZone_Compare(curr_wz, emer_eze_id);
 	}
 	while (curr_wz != NULL)
 	{
-		next_wz = List_Get_Next(bf);
+		next_wz = List_Get_First(bf);
 		if (WarZone_Compare(next_wz, wz))
 		{
 			next_wz = List_Get_Next(bf);
 		}
-		PSQUAD next_squ = NULL;
-		PLIST squ_list = WarZone_Get_Squ_List(curr_wz);
+		PLIST squ_list = WarZone_Get_Squ_List(next_wz);
 		PSQUAD curr_squ = List_Get_First(squ_list);
-		while (curr_wz != NULL)
+		while (curr_squ != NULL)
 		{
-			next_squ = List_Get_Next(squ_list);
 			List_Add_Elem(emer_wz_squ_list, curr_squ);
 			List_Remove_Elem(squ_list, curr_squ);
-			curr_squ = next_squ;
+			curr_squ = List_Get_Next(squ_list);
 		}
-		curr_wz = next_wz;
+		next_wz = List_Get_Next(bf);
 	}
+}
+//******************************************************************************
+//* function name: Battlefield_Move_Squad
+//* Description : moves squad from one war zone to other one
+//* Parameters: pointer to Battlefield, origin wz id, dest wz id, squad id
+//* Return Value: Result of operation 
+//******************************************************************************
+Result Battlefield_Move_Squad(PLIST bf, char* src_wz_id,char* dest_wz_id,char* id)
+{
+	PWarZone src_wz = List_Get_Elem(bf, src_wz_id);
+	PWarZone dest_wz = List_Get_Elem(bf, dest_wz_id);
+	PLIST src_squ_list = WarZone_Get_Squ_List(src_wz);
+	PLIST dest_squ_list = WarZone_Get_Squ_List(dest_wz);
+	PSQUAD search = List_Get_First(src_squ_list);
+	while (search != NULL)
+	{
+		if (Squad_Compare(search, id))
+		{
+			if (!List_Add_Elem(dest_squ_list, search))
+			{
+				printf(MALLOC_ERR_MSG);
+				return FAILURE; // means malloc failed
+			}
+			List_Remove_Elem(src_squ_list, id);
+			return SUCCESS;
+		}
+	}
+	return FAILURE;
+}
+//******************************************************************************
+//* function name: Battlefield_Add_Sold
+//* Description : adds soldier to battlefield in given squad
+//* Parameters: pointer to Battlefield ,wz id,  squad id, soldier id,soldier pos
+//* Return Value: Result of operation 
+//******************************************************************************
+Result Battlefield_Add_Sold(PLIST bf, char* wz_id, char* sq_id, char* id,char* pos)
+{
+	PWarZone wz = List_Get_Elem(bf, wz_id);
+	PLIST squ_list = WarZone_Get_Squ_List(wz);
+	PSQUAD sq= List_Get_Elem(squ_list, sq_id);
+	bool mem_failed = false;
+	Squad_Add_Soldier(sq, id, pos, &mem_failed);
+	if (mem_failed)
+	{
+		printf(MALLOC_ERR_MSG);
+		return FAILURE;
+	}
+	return SUCCESS;
+}
+//******************************************************************************
+//* function name: Battlefield_Add_APC
+//* Description : adds apc to battlefield in given wz and squad
+//* Parameters: pointer to Battlefield ,wz id,  squad id, apc id
+//* Return Value: Result of operation 
+//******************************************************************************
+Result Battlefield_Add_APC(PLIST bf, char* wz_id, char* sq_id, char* id)
+{
+	PWarZone wz = List_Get_Elem(bf, wz_id);
+	PLIST squ_list = WarZone_Get_Squ_List(wz);
+	PSQUAD sq = List_Get_Elem(squ_list, sq_id);
+	bool mem_failed = false;
+	Squad_Add_APC(sq, id, &mem_failed);
+	if (mem_failed)
+	{
+		printf(MALLOC_ERR_MSG);
+		return FAILURE;
+	}
+	return SUCCESS;
+}
+//******************************************************************************
+//* function name: Battlefield_Sold_ToAPC
+//* Description : adds soldier to apc given in secifed place
+//* Parameters: pointer to Battlefield ,wz id,  squad id, apc id, sold id
+//* Return Value: Result of operation 
+//******************************************************************************
+Result Battlefield_Sold_ToAPC(PLIST bf, char* wz_id, char* sq_id, char* apc_id,char* id)
+{
+	PWarZone wz = List_Get_Elem(bf, wz_id);
+	PLIST squ_list = WarZone_Get_Squ_List(wz);
+	PSQUAD sq = List_Get_Elem(squ_list, sq_id);
+	bool mem_failed = false;
+	Squad_Insert_Sold_APC(sq, apc_id, id, &mem_failed);
+	if (mem_failed)
+	{
+		printf(MALLOC_ERR_MSG);
+		return FAILURE;
+	}
+	return SUCCESS;
 }

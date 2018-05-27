@@ -22,4 +22,5 @@ bool WarZone_SquadExist(PWarZone zone, char* id);
 Result WarZone_Add_Squad(PWarZone wz, char *id);
 void WarZone_Del_Squad(PWarZone wz, char *id);
 PLIST WarZone_Get_Squ_List(PWarZone wz);
+char* WarZone_Get_ID(PWarZone wz);
 #endif

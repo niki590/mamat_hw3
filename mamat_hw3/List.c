@@ -218,7 +218,7 @@ Element List_Get_Next(PLIST list)
 //*				and bool  that indicate if malloc failed
 //* Return Value: NA
 //******************************************************************************
-void List_Duplicate(PLIST src, PLIST dst,bool mem_failed)
+void List_Duplicate(PLIST src, PLIST dst,Pbool mem_failed)
 {
 	if ((src == NULL)||(dst==NULL))
 	{
@@ -232,7 +232,7 @@ void List_Duplicate(PLIST src, PLIST dst,bool mem_failed)
 		adding = List_Add_Elem(dst, curr->data);
 		if (adding == FAILURE)
 		{
-			mem_failed = true;
+			*mem_failed = true;
 			return;
 		}
 		curr = curr->next;
@@ -335,7 +335,7 @@ void List_Special_Insert(PLIST list, char *cmd)
 		printf(MALLOC_ERR_MSG);
 		return;
 	}
-	new_node->data = (char*)malloc(strlen(cmd));
+	new_node->data = (char*)malloc(strlen(cmd)+1);
 	if (new_node->data == NULL)
 	{
 		printf(MALLOC_ERR_MSG);
@@ -389,7 +389,6 @@ void List_Special_Insert(PLIST list, char *cmd)
 		return;
 	}
 	PNODE node1= curr->prev;
-	PNODE node2 = curr->next;
 	new_node->prev = node1;;
 	new_node->next = curr;
 	node1->next = new_node;

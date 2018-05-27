@@ -67,7 +67,7 @@ Element WarZone_Duplicate(Element wz)
 	}
 	new_wz->lvl = old_wz->lvl;
 	bool mem_failed = false;
-	List_Duplicate(old_wz->squ_list, new_wz->squ_list, mem_failed);
+	List_Duplicate(old_wz->squ_list, new_wz->squ_list, &mem_failed);
 	if (mem_failed)
 	{
 		printf(MALLOC_ERR_MSG);
@@ -258,4 +258,14 @@ PLIST WarZone_Get_Squ_List(PWarZone wz)
 		return NULL;
 	}
 	return wz->squ_list;
+}
+//******************************************************************************
+//* function name: WarZone_Get_OD
+//* Description : returns given ez id
+//* Parameters: pointer to warzone
+//* Return Value: pointer to name
+//******************************************************************************
+char* WarZone_Get_ID(PWarZone wz)
+{
+	return wz->ID;
 }
