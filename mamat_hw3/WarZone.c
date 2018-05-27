@@ -244,3 +244,18 @@ void WarZone_Del_Squad(PWarZone wz, char *id)
 {
 	List_Remove_Elem(wz->squ_list, id);
 }
+//******************************************************************************
+//* function name: WarZone_Get_Squ_List
+//* Description : gives access to squ_list
+//* Parameters: pointer to warzone
+//* Return Value: pointer to squ_list of wz
+//******************************************************************************
+PLIST WarZone_Get_Squ_List(PWarZone wz)
+{
+	if (wz == NULL)
+	{
+		printf(ARG_ERR_MSG);
+		return NULL;
+	}
+	return wz->squ_list;
+}

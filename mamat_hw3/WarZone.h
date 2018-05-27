@@ -21,5 +21,5 @@ bool WarZone_Compare(Element WarZone_t, Element name_t);
 bool WarZone_SquadExist(PWarZone zone, char* id);
 Result WarZone_Add_Squad(PWarZone wz, char *id);
 void WarZone_Del_Squad(PWarZone wz, char *id);
-
+PLIST WarZone_Get_Squ_List(PWarZone wz);
 #endif

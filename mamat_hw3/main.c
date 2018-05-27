@@ -286,7 +286,25 @@ void Execute_Command(char *line)
 	}
 	else if (!strcmp(splited[1], "Del_ Sold"))
 	{
-
+		if (!Battlefield_WZ_Exist(Battlefield, splited[2]))
+		{
+			printf("Error: No Such War Zone\n");
+			return;
+		}
+		if (!Battlefield_Squad_Exist(Battlefield, splited[3]))
+		{
+			printf("Error: No Such Squad\n");
+			return;
+		}
+		if (!Battlefield_SoldExist(Battlefield, splited[4]))
+		{
+			printf("Error: No Such Soldier\n");
+			return;
+		}
+		PWarZone curr_wz = List_Get_Elem(Battlefield, splited[2]);
+		PLIST squ_list = WarZone_Get_Squ_List(curr_wz);
+		PSQUAD curr_squ = List_Get_Elem(squ_list, splited[3]);
+		Squad_Delete_Soldier(curr_squ, splited[4]);
 	}
 	else if (!strcmp(splited[1], "Add_APC"))
 	{

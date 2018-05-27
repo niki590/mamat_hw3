@@ -77,3 +77,45 @@ bool Battlefield_Squad_Exist(PLIST battle, char * id)
 	}
 	return false;
 }
+//******************************************************************************
+//* function name: Battlefield_Emergency
+//* Description : recieves pointer to a battlefield and  a
+//* pointer of the emergency warzone and moves all squads from
+//* other warzones to the given one
+//* Parameters: pointer to warzone and pointer to battlefield
+//* Return Value: NA 
+//******************************************************************************
+void Battlefield_Emergency(PLIST bf, PWarZone wz)
+{
+	if ((bf == NULL) || (wz == NULL))
+	{
+		printf(ARG_ERR_MSG);
+		return;
+	}
+	PWarZone next_wz = NULL;
+	PLIST emer_wz_squ_list = WarZone_Get_Squ_List(wz);
+	PWarZone curr_wz = List_Get_First(bf);
+	if (WarZone_Compare(curr_wz, wz))
+	{
+		curr_wz = List_Get_Next(bf);
+	}
+	while (curr_wz != NULL)
+	{
+		next_wz = List_Get_Next(bf);
+		if (WarZone_Compare(next_wz, wz))
+		{
+			next_wz = List_Get_Next(bf);
+		}
+		PSQUAD next_squ = NULL;
+		PLIST squ_list = WarZone_Get_Squ_List(curr_wz);
+		PSQUAD curr_squ = List_Get_First(squ_list);
+		while (curr_wz != NULL)
+		{
+			next_squ = List_Get_Next(squ_list);
+			List_Add_Elem(emer_wz_squ_list, curr_squ);
+			List_Remove_Elem(squ_list, curr_squ);
+			curr_squ = next_squ;
+		}
+		curr_wz = next_wz;
+	}
+}
