@@ -3,14 +3,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "Battlefield.h"
+#include "List.h"
+
+void Execute_Command(char *line);
+void Execute_List(PLIST cmd);
+
+
 #define TK " \n\t"
+static PLIST Battlefield;
 
 void String_free(Element str_t)
 {
 	char* str = (char*)str_t;
 	free(str);
 }
-
 bool String_compare(Element str1_t, Element str2_t)
 {
 	char* str1 = (char*)str1_t;
@@ -19,9 +25,11 @@ bool String_compare(Element str1_t, Element str2_t)
 		return true;
 	return false;
 }
-
-
-
+void String_print(Element line_t)
+{
+	char* line = (char*)line_t;
+	printf("%s\n", line);
+}
 
 void part3()
 {
@@ -63,11 +71,9 @@ void part3()
 	APC_Delete(brauda2);
 
 }
-
 void part_4()
 {
 	bool mem_failed = false;
-	Result check;
 	PSQUAD nikigang = Squad_Create("nikigang", Soldier_Duplicate, Soldier_Delete, Soldier_Compare, Soldier_Print,
 		APC_Duplicate, APC_Delete, APC_Compare, APC_Print);
 	//Adding soldiers
@@ -111,33 +117,202 @@ void part_4()
 	Squad_Delete(ofrygang);
 }
 
-int main()
+void Battlefield_Delete()
 {
-	PLIST cmd = List_Create(NULL, String_free, String_compare, NULL);
-	char line[MAX_LINE_LENGTH];
-	line[255] = '\0';
-	char *command;
-	while (fgets(line, MAX_LINE_LENGTH, stdin))
+	List_Delete(Battlefield);
+}
+
+
+void Get_Commands()
+{
+	PLIST cmd = List_Create(NULL, String_free, String_compare, String_print);
+	char line[MAX_LINE_LENGTH+1];
+	bool finished = false;
+	while (finished)
 	{
-		Special_Insert(line);
+		if (!fgets(line, MAX_LINE_LENGTH, stdin))
+			finished = true; //end of commands
+		if (!strcmp(line, "Exit"))
+		{
+			Battlefield_Delete();
+			List_Delete(cmd);
+			return ;
+		}
+		if (!strcmp(line, "Exe"))
+		{
+			Execute_List(cmd);
+			List_Delete(cmd);
+			cmd = List_Create(NULL, String_free, String_compare, String_print);
+		}
+		List_Special_Insert(cmd, line);
+	}
+}
+
+void Execute_List(PLIST cmd)
+{
+	char* line = (char*)malloc(MAX_LINE_LENGTH + 1);
+	if (line == NULL)
+	{
+		printf(MALLOC_ERR_MSG);
+		Battlefield_Delete();
+	}
+	strcpy(line, List_Get_First(cmd));
+	if (line == NULL)
+	{
+		printf("No Commands to Execute\n");
+		free(line);
+		return;
+	}
+	while (line != NULL)
+	{
+		Execute_Command(line);
+		strcpy(line, List_Get_Next(cmd));
+	}
+	printf("**********All Commands Executed**********\n\n");
+	return;
+}
+
+void Execute_Command(char *line)
+{
+	char *commands = strtok(line, TK);
+	char *splited[MAX_VALUES_CMD];
+	for (int i = 0; i < MAX_VALUES_CMD; i++)
+		splited[i] = NULL;
+	int counter = 0;
+	while ((commands != NULL) && (counter < MAX_VALUES_CMD))
+	{
+		splited[counter] = commands;
+		commands = strtok(NULL, TK);
+		counter++;
+	}
+	if (!strcmp(splited[1], "Create_B"))
+	{
+		Battlefield = Battlefield_Create();
+		return;
+	}
+	if (Battlefield == NULL)
+	{
+		printf("Error: No Battlefield\n");
+		return;
+	}
+	else if (!strcmp(splited[1], "Add_W"))
+	{
+		
+		if (Battlefield_WZ_Exist(Battlefield, splited[2]))
+		{
+			printf("Error: War Zone Already Exists\n");
+			return;
+		}
+		PWarZone new_wz = WarZone_Create(splited[2], Squad_Duplicate, Squad_Delete, Squad_Compare, Squad_Delete);
+		List_Add_Elem(Battlefield, new_wz);
+		WarZone_Delete(new_wz);
+	}
+	else if (!strcmp(splited[1], "Del_W"))
+	{
+		if (!Battlefield_WZ_Exist(Battlefield, splited[2]))
+		{
+			printf("Error: No Such War Zone\n");
+			return;
+		}
+		List_Remove_Elem(Battlefield, splited[2]);
+	}
+	else if (!strcmp(splited[1], "R_W"))
+	{
+		if (!Battlefield_WZ_Exist(Battlefield, splited[2]))
+		{
+			printf("Error: No Such War Zone\n");
+			return;
+		}
+		PWarZone wz = List_Get_Elem(Battlefield, splited[2]);
+		if (!WarZone_Raise_Alert(wz))
+		{
+			Battlefield_Emergency(Battlefield, wz);
+		}
+	}
+	else if (!strcmp(splited[1], "Add_Sq"))
+	{
+		if (!Battlefield_WZ_Exist(Battlefield, splited[2]))
+		{
+			printf("Error: No Such War Zone\n");
+			return;
+		}
+		if (Battlefield_Squad_Exist(Battlefield, splited[3]))
+		{
+			printf("Error: Squad Already Exists\n");
+			return;
+		}
+		PWarZone wz = List_Get_Elem(Battlefield, splited[2]);
+		if (!WarZone_Add_Squad(wz, splited[3]))
+		{
+			Battlefield_Delete();
+		}
+	}
+	else if (!strcmp(splited[1], "Del_Sq"))
+	{
+		if (!Battlefield_WZ_Exist(Battlefield, splited[2]))
+		{
+			printf("Error: No Such War Zone\n");
+			return;
+		}
+		if (!Battlefield_Squad_Exist(Battlefield, splited[3]))
+		{
+			printf("Error: No Such Squad\n");
+			return;
+		}
+		WarZone_Del_Squad(List_Get_Elem(Battlefield, splited[2]), splited[3]);
+	}
+	else if (!strcmp(splited[1], "M_Sq"))
+	{
+		if (!Battlefield_WZ_Exist(Battlefield, splited[2]))
+		{
+			printf("Error: No Such Origin War Zone\n");
+			return;
+		}
+		if (!Battlefield_WZ_Exist(Battlefield, splited[3]))
+		{
+			printf("Error: No Such Dest War Zone\n");
+			return;
+		}
+		if (!Battlefield_Squad_Exist(Battlefield, splited[3]))
+		{
+			printf("Error: No Such Dest Squad\n");
+			return;
+		}
 
 	}
-
-
-
-	while (fgets(line, MAX_LINE_LENGTH, stdin))
+	else if (!strcmp(splited[1], "Add_Sold"))
 	{
-		command = strtok(line, TK);
-		char *splited[3];
-		for (int i = 0; i < 3; i++)
-			splited[i] = NULL;
-		int counter = 0;
-		if (command == NULL)
-			continue;
-		while ((command != NULL) && (counter<3))
-		{
-			splited[counter] = command;
-			command = strtok(NULL, TK);
-			counter++;
-		}
+
+	}
+	else if (!strcmp(splited[1], "Del_ Sold"))
+	{
+
+	}
+	else if (!strcmp(splited[1], "Add_APC"))
+	{
+
+	}
+	else if (!strcmp(splited[1], "Del_APC"))
+	{
+
+	}
+	else if (!strcmp(splited[1], "APC_Pop"))
+	{
+
+	}
+	else if (!strcmp(splited[1], "Print"))
+	{
+
+	}
+	else 
+	{
+		printf("Error: Illegal Command\n");
+	}
+}
+
+
+int main()
+{
+	Battlefield = NULL;
+
 }

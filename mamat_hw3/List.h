@@ -20,5 +20,5 @@ Copy_Function List_Get_Copy(PLIST list);
 Free_Function List_Get_Free(PLIST list);
 Compare_Function List_Get_Comp(PLIST list);
 Print_Func List_Get_Print(PLIST list);
-void Special_Insert(PLIST list, char *cmd);
+void List_Special_Insert(PLIST list, char *cmd);
 #endif

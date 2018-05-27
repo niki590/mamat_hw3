@@ -123,7 +123,6 @@ int WarZone_Raise_Alert(PWarZone wz)
 	wz->lvl++;
 	if (wz->lvl == 3)
 	{
-		//activate emergency protocol
 		wz->lvl = 0;
 		return wz->lvl;
 	}
@@ -145,12 +144,12 @@ bool WarZone_SoldExist(PWarZone zone,char* id)
 		printf(ARG_ERR_MSG);
 		return NULL;
 	}
-	PSQUAD curr_zone = List_Get_First(zone->squ_list);
-	while (curr_zone != NULL)
+	PSQUAD curr_sq = List_Get_First(zone->squ_list);
+	while (curr_sq != NULL)
 	{
-		if (Squad_SoldExist(curr_zone, id))
+		if (Squad_SoldExist(curr_sq, id))
 			return true;
-		curr_zone = List_Get_Next(zone->squ_list);
+		curr_sq = List_Get_Next(zone->squ_list);
 	}
 	return false;
 }
@@ -167,12 +166,12 @@ bool WarZone_APCExist(PWarZone zone, char* id)
 		printf(ARG_ERR_MSG);
 		return false;
 	}
-	PSQUAD curr_zone = List_Get_First(zone->squ_list);
-	while (curr_zone != NULL)
+	PSQUAD curr_sq = List_Get_First(zone->squ_list);
+	while (curr_sq != NULL)
 	{
-		if (Squad_APCExist(curr_zone, id))
+		if (Squad_APCExist(curr_sq, id))
 			return true;
-		curr_zone = List_Get_Next(zone->squ_list);
+		curr_sq = List_Get_Next(zone->squ_list);
 	}
 	return false;
 }
@@ -189,4 +188,59 @@ bool WarZone_Compare(Element WarZone_t, Element name_t)
 	if (!strcmp(WarZone->ID, name))
 		return true;
 	return false;
+}
+//******************************************************************************
+//* function name: WarZone_SquadExist
+//* Description : checks if squad with given name exist in given warzone
+//* Parameters: pointer to warzone, id of squad
+//* Return Value: true if exist, false otherwise 
+//******************************************************************************
+bool WarZone_SquadExist(PWarZone zone, char* id)
+{
+	if (zone == NULL)
+	{
+		printf(ARG_ERR_MSG);
+		return false;
+	}
+	PSQUAD curr_sq = List_Get_First(zone->squ_list);
+	while (curr_sq != NULL)
+	{
+		if (Squad_Compare(curr_sq, id))
+			return true;
+		curr_sq = List_Get_Next(zone->squ_list);
+	}
+	return false;
+}
+//******************************************************************************
+//* function name: Battlefield_Add_Squad
+//* Description : creates squad with given name and adds it to given wz
+//* Parameters: pointer to wz, id of squad
+//* Return Value: SUCCESS or FAILURE 
+//******************************************************************************
+Result WarZone_Add_Squad(PWarZone wz, char *id)
+{
+	PSQUAD new = Squad_Create(id, Soldier_Duplicate, Soldier_Delete, Soldier_Compare, Soldier_Print,
+		APC_Duplicate, APC_Delete, APC_Compare, APC_Print);
+	if (new == NULL)
+	{
+		printf(MALLOC_ERR_MSG);
+		return FAILURE;
+	}
+	if (List_Add_Elem(wz->squ_list, new))
+	{
+		printf(MALLOC_ERR_MSG);
+		return FAILURE;
+	}
+	Squad_Delete(new);
+	return SUCCESS;
+}
+//******************************************************************************
+//* function name: Battlefield_Del_Squad
+//* Description : Deletes squad with given name and adds it to given wz
+//* Parameters: pointer to wz, id of squad
+//* Return Value: SUCCESS or FAILURE 
+//******************************************************************************
+void WarZone_Del_Squad(PWarZone wz, char *id)
+{
+	List_Remove_Elem(wz->squ_list, id);
 }

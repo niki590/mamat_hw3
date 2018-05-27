@@ -353,6 +353,20 @@ bool Squad_APCExist(PSQUAD squ, char * id)
 	}
 	return false;
 }
+//******************************************************************************
+//* function name: Squad_Compare
+//* Description : checks if squad given is with name given
+//* Parameters: pointer to warzone, id of warzone
+//* Return Value: true if exist, false otherwise 
+//******************************************************************************
+bool Squad_Compare(Element squad_t, Element name_t)
+{
+	PSQUAD squad = (PSQUAD)squad_t;
+	char* name = (char*)name_t;
+	if (!strcmp(squad->ID, name))
+		return true;
+	return false;
+}
 
 
 

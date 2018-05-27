@@ -23,5 +23,6 @@ Result Squad_Delete_Soldier(PSQUAD squ, char* soldID);
 Result Squad_Delete_APC(PSQUAD squ, char* apcID);
 bool Squad_SoldExist(PSQUAD squ, char * id);
 bool Squad_APCExist(PSQUAD squ, char * id);
+bool Squad_Compare(Element squad_t, Element name_t);
 
 #endif

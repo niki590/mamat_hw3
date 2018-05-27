@@ -18,5 +18,8 @@ void WarZone_Delete(Element WarZone);
 void WarZone_Print(Element WarZone);
 int WarZone_Raise_Alert(PWarZone wz);
 bool WarZone_Compare(Element WarZone_t, Element name_t);
+bool WarZone_SquadExist(PWarZone zone, char* id);
+Result WarZone_Add_Squad(PWarZone wz, char *id);
+void WarZone_Del_Squad(PWarZone wz, char *id);
 
 #endif

@@ -27,11 +27,6 @@ typedef struct List_t
 //******************************************************************************
 PLIST List_Create(Copy_Function copy, Free_Function free, Compare_Function comp, Print_Func print)
 {
-	if ((copy == NULL) || (free == NULL) || (comp == NULL) || (print == NULL))
-	{
-		printf(ARG_ERR_MSG);
-		return NULL;
-	}
 	PLIST new = (PLIST)malloc(sizeof(LIST));
 	if (new==NULL)
 	{
@@ -194,7 +189,6 @@ Element List_Get_First(PLIST list)
 	}
 	if (list->head == NULL)
 	{
-		printf("no nodes in list");
 		return NULL;
 	}
 	return list->head->data;
@@ -326,16 +320,21 @@ Print_Func List_Get_Print(PLIST list)
 	}
 	return list->print_func;
 }
-
-void Special_Insert(PLIST list, char *cmd)
+//******************************************************************************
+//* function name: List_Special_Insert
+//* Description : adds an item given to the list, in "sorted" way(first index)
+//* Parameters: pointer to list, pointer to char
+//* Return Value: NA 
+//******************************************************************************
+void List_Special_Insert(PLIST list, char *cmd)
 {
+	list->size++;
 	PNODE new_node = (PNODE)malloc(sizeof(NODE));
 	if (new_node == NULL)
 	{
 		printf(MALLOC_ERR_MSG);
 		return;
 	}
-	PNODE new_node = (PNODE)malloc(sizeof(NODE));
 	new_node->data = (char*)malloc(strlen(cmd));
 	if (new_node->data == NULL)
 	{
@@ -380,6 +379,14 @@ void Special_Insert(PLIST list, char *cmd)
 			curr->next = new_node;
 			return;
 		}
+	}
+	if (curr->prev == NULL)
+	{
+		list->head = new_node;
+		curr->prev = new_node;
+		new_node->prev = NULL;
+		new_node->next = curr;
+		return;
 	}
 	PNODE node1= curr->prev;
 	PNODE node2 = curr->next;
