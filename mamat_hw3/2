@@ -1,0 +1,177 @@
+Battlefield Created!
+Error: War Zone Already Exists
+Error: No Such War Zone
+Error: Squad Already Exists
+Error: Squad Already Exists
+Error: No Such War Zone
+Error: No Such War Zone
+Battlefield:
+WarZone: w1 , Alert State: 1
+
+Squad: sq1 , Total troops: 0
+APCs:
+Soldiers:
+
+Squad: sq2 , Total troops: 0
+APCs:
+Soldiers:
+
+WarZone: w2 , Alert State: 1
+
+WarZone: w3 , Alert State: 0
+
+Squad: sq3 , Total troops: 0
+APCs:
+Soldiers:
+
+**********All Commands Executed**********
+
+No Commands to Execute
+**********All Commands Executed**********
+
+No Commands to Execute
+**********All Commands Executed**********
+
+Error: No Such Squad
+Error: No Such Squad
+Error: Soldier Already Exists
+Error: No Such Squad
+Error: No Such War Zone
+Error: No Such War Zone
+Battlefield:
+WarZone: w1 , Alert State: 1
+
+Squad: sq1 , Total troops: 0
+APCs:
+Soldiers:
+
+WarZone: w2 , Alert State: 1
+
+Squad: sq4 , Total troops: 0
+APCs:
+Soldiers:
+
+Squad: sq2 , Total troops: 2
+APCs:
+Soldiers:
+niki1 , INT
+niki2 , INT
+
+WarZone: w3 , Alert State: 0
+
+Squad: sq3 , Total troops: 0
+APCs:
+Soldiers:
+
+**********All Commands Executed**********
+
+Error: No Such Squad
+Error: No Such Soldier
+Error: No Such War Zone
+Error: No Such War Zone
+Error: No Such Squad
+Error: APC Already Exists
+Error: APC Already Exists
+Battlefield:
+WarZone: w1 , Alert State: 1
+
+Squad: sq1 , Total troops: 1
+APCs:
+Soldiers:
+niki3 , MED
+
+WarZone: w2 , Alert State: 1
+
+Squad: sq4 , Total troops: 0
+APCs:
+Soldiers:
+
+Squad: sq3 , Total troops: 0
+APCs:
+Soldiers:
+
+WarZone: w3 , Alert State: 0
+
+Squad: sq2 , Total troops: 2
+APCs:
+apc1 , Occupancy: 0/6
+apc2 , Occupancy: 0/6
+Soldiers:
+niki1 , INT
+niki4 , MED
+
+**********All Commands Executed**********
+
+Error: No Such APC
+Error: No Such Soldier
+Error: No Such Squad
+Battlefield:
+WarZone: w1 , Alert State: 1
+
+Squad: sq1 , Total troops: 1
+APCs:
+Soldiers:
+niki3 , MED
+
+WarZone: w2 , Alert State: 1
+
+Squad: sq4 , Total troops: 0
+APCs:
+Soldiers:
+
+Squad: sq2 , Total troops: 2
+APCs:
+apc1 , Occupancy: 2/6
+Seat 1: niki1 , INT
+Seat 2: niki4 , MED
+apc2 , Occupancy: 0/6
+Soldiers:
+
+WarZone: w3 , Alert State: 0
+
+Squad: sq3 , Total troops: 0
+APCs:
+Soldiers:
+
+Error: No Such War Zone
+**********All Commands Executed**********
+
+Error: No Such APC
+Error: No Such Squad
+Error: No Such APC
+Error: No Such Squad
+Error: No Such War Zone
+Error: No Such APC
+Error: No Such APC
+Error: No Such Squad
+Error: No Such Squad
+Error: No Such War Zone
+Battlefield:
+WarZone: w1 , Alert State: 1
+
+Squad: sq1 , Total troops: 1
+APCs:
+Soldiers:
+niki3 , MED
+
+WarZone: w2 , Alert State: 1
+
+Squad: sq4 , Total troops: 0
+APCs:
+Soldiers:
+
+Squad: sq2 , Total troops: 2
+APCs:
+apc1 , Occupancy: 1/6
+Seat 1: niki1 , INT
+Soldiers:
+niki4 , MED
+
+WarZone: w3 , Alert State: 0
+
+Squad: sq3 , Total troops: 0
+APCs:
+Soldiers:
+
+**********All Commands Executed**********
+

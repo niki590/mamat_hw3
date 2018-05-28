@@ -1,0 +1,112 @@
+Error: Illegal Command
+Battlefield Created!
+Error: No Such Squad
+Error: No Such War Zone
+Battlefield:
+WarZone: w2 , Alert State: 0
+
+Squad: sq2 , Total troops: 9
+APCs:
+Soldiers:
+2 , INT
+3 , INT
+4 , INT
+5 , INT
+6 , INT
+8 , INT
+9 , INT
+7 , INT
+10 , INT
+
+Squad: sq4 , Total troops: 0
+APCs:
+Soldiers:
+
+Squad: sq5 , Total troops: 0
+APCs:
+Soldiers:
+
+WarZone: w3 , Alert State: 0
+
+WarZone: w1 , Alert State: 0
+
+Squad: sq3 , Total troops: 0
+APCs:
+Soldiers:
+
+**********All Commands Executed**********
+
+Error: No Such Soldier
+Battlefield:
+WarZone: w2 , Alert State: 0
+
+Squad: sq2 , Total troops: 9
+APCs:
+apc1 , Occupancy: 6/6
+Seat 1: 2 , INT
+Seat 2: 3 , INT
+Seat 3: 4 , INT
+Seat 4: 5 , INT
+Seat 5: 6 , INT
+Seat 6: 7 , INT
+Soldiers:
+8 , INT
+9 , INT
+10 , INT
+
+Squad: sq4 , Total troops: 0
+APCs:
+Soldiers:
+
+Squad: sq5 , Total troops: 0
+APCs:
+Soldiers:
+
+WarZone: w3 , Alert State: 0
+
+WarZone: w1 , Alert State: 0
+
+Squad: sq3 , Total troops: 0
+APCs:
+Soldiers:
+
+**********All Commands Executed**********
+
+Error: APc is Empty
+Error: No Such APC
+Error: No Such APC
+Battlefield:
+WarZone: w2 , Alert State: 0
+
+Squad: sq2 , Total troops: 9
+APCs:
+apc1 , Occupancy: 0/6
+Soldiers:
+8 , INT
+9 , INT
+10 , INT
+7 , INT
+6 , INT
+5 , INT
+4 , INT
+3 , INT
+2 , INT
+
+Squad: sq4 , Total troops: 0
+APCs:
+Soldiers:
+
+Squad: sq5 , Total troops: 0
+APCs:
+Soldiers:
+
+WarZone: w3 , Alert State: 0
+
+WarZone: w1 , Alert State: 0
+
+Squad: sq3 , Total troops: 0
+APCs:
+Soldiers:
+
+**********All Commands Executed**********
+

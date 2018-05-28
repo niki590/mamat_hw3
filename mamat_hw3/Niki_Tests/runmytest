@@ -1,0 +1,30 @@
+#! /bin/bash
+
+## Script name: runmytest
+## Description: runs tests on all files with given format in curr folder , prints output into new files, compare with given ones and prints msgs if needed.
+## 				Important: 1)files must be in format of <given_format><number>
+## 				Important: 2)curr folder must contain all test files(in,out,out of errors).
+## Parameters: 1:name of exe file. 2:format of "in" file(for ex: "in" to run tests named in1 in2 ...). 3: format of out files given. 4:format of out error filles given.
+## Return value: msgs if needed when there is difference
+i=1; 
+while (( i <= 3 )); do  #define here the number of tests 
+./$1 < $2$i > nikiout$i 2> nikierr$i ;
+a="`diff nikiout$i $3$i`";
+if  [[ ! -z "$a" ]]
+then
+echo "there is difference in out files of test: "$2$i;
+fi
+##a="`diff nikierr$i $4$i`";
+##if  [[ ! -z "$a" ]]
+##then
+##echo "there is difference in error files of test: "$1$i;
+##fi
+valgrind --tool=memcheck --leak-check=full ./"$1" < "$2$i"  2> valcheck$i >> valcheck$i  ;
+a=`grep -c "ERROR SUMMARY: 0 errors" valcheck$i`;  #find if the line which says everything went well
+b=`grep -c "no leaks are possible" valcheck$i` ;
+if (( a ==0 || b==0 )) ; then 
+echo "there is memory leak,in test: in"$i;
+fi
+i=$(( i + 1 ));
+done
+exit 0

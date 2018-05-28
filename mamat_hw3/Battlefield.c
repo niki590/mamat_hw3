@@ -125,6 +125,8 @@ void Battlefield_Emergency(PLIST bf, PWarZone wz)
 //******************************************************************************
 Result Battlefield_Move_Squad(PLIST bf, char* src_wz_id,char* dest_wz_id,char* id)
 {
+	if (!strcmp(src_wz_id, dest_wz_id))
+		return SUCCESS;
 	PWarZone src_wz = List_Get_Elem(bf, src_wz_id);
 	PWarZone dest_wz = List_Get_Elem(bf, dest_wz_id);
 	PLIST src_squ_list = WarZone_Get_Squ_List(src_wz);
@@ -142,6 +144,7 @@ Result Battlefield_Move_Squad(PLIST bf, char* src_wz_id,char* dest_wz_id,char* i
 			List_Remove_Elem(src_squ_list, id);
 			return SUCCESS;
 		}
+		search = List_Get_Next(src_squ_list);
 	}
 	return FAILURE;
 }

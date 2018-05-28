@@ -1,0 +1,74 @@
+1 Create_B
+2 Add_W w1
+3 Add_W w1
+4 Add_W w2
+5 Add_W w3
+6 R_W w1
+7 R_W w2
+8 R_W w4
+9 Add_Sq w1 sq1
+10 Add_Sq w1 sq2
+11 Add_Sq w1 sq2
+12 Add_Sq w2 sq2
+13 Add_Sq nw1 sq2
+14 Add_Sq nw1 sq9	
+15 Add_Sq w3 sq3
+17 Add_sq w2 sq4
+16 Print
+Exe
+Exe
+Exe
+1 M_Sq w1 w2 sq2 
+2 M_Sq w1 w2 sq5 
+3 M_Sq w1 w2 sq2 
+4 Add_Sold w2 sq2 niki1 INT
+5 Add_Sold w2 sq2 niki2 INT
+6 Add_Sold w2 sq2 niki1 MED
+7 Add_Sold w2 sq1 niki1 MED 
+8 Add_Sold nw1 sq1 niki1 MED 
+9 Add_Sold nw1 sq7 niki1 MED 
+10 Print
+Exe
+1 M_Sq w2 w3 sq2 
+2 M_Sq w3 w2 sq3 
+3 Del_Sold w1 sq2 niki
+4 Del_Sold w1 sq1 niki
+5 Del_Sold w4 sq2 niki2
+6 Del_Sold w3 sq2 niki2
+7 Add_Sold w1 sq1 niki3 MED 
+8 Add_Sold w3 sq2 niki4 MED 
+9 Add_APC w3 sq2 apc1 
+10 Add_APC w3 sq2 apc2
+11 Add_APC nw3 sq2 apc2
+12 Add_APC w3 sq1 apc2
+14 Add_APC w3 sq2 apc2
+13 Add_APC w2 sq4 apc2
+15 Print
+Exe
+3 Sold_Insert w2 sq2 apc1 niki1 
+2 M_sq w2 w3 sq3
+1 M_sq w3 w2 sq2
+5 Sold_Insert w2 sq2 apc1 niki4 
+4 Sold_Insert w2 sq2 apc1 niki4 
+6 Sold_Insert w2 sq2 apc3 niki1 
+7 Sold_Insert w2 sq2 apc2 niki7 
+9 Sold_Insert w5 sq2 apc2 niki7 
+8 Sold_Insert w2 sq5 apc2 niki7 
+9 Print
+EXE
+1 Del_APC w2 sq2 apc1
+2 Del_APC w2 sq2 apc1
+3 Del_APC w2 sq3 apc1
+4 Del_APC w2 sq2 apc3
+5 Del_APC w3 sq5 apc1
+6 Del_APC w4 sq5 apc1
+7 Sold_Insert w2 sq2 apc2 niki1
+8 APC_Pop w2 sq2 apc2 
+9 APC_Pop w2 sq2 apc4
+10 APC_Pop w2 sq5 apc2
+11 APC_Pop w2 sq5 apc4
+12 APC_Pop w4 sq5 apc4
+13 Print
+EXE
+Exit
+

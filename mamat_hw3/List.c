@@ -140,6 +140,14 @@ Result List_Remove_Elem(PLIST list, PKey item)
 		printf(ARG_ERR_MSG);
 		return FAILURE;
 	}
+	if ((list->iter != NULL)&& (list->comp_func(list->iter->data, item)))
+	{
+		if (list->iter->next == NULL)
+			list->iter = NULL;
+		else
+			list->iter = list->iter->next;
+	}
+	
 	PNODE save;
 	save = list->head;
 	for (int i = 0; i < list->size; i++)
@@ -181,7 +189,6 @@ Result List_Remove_Elem(PLIST list, PKey item)
 //******************************************************************************
 Element List_Get_First(PLIST list)
 {
-	list->iter = list->head;
 	if (list == NULL) 
 	{
 		printf(ARG_ERR_MSG);
@@ -191,6 +198,7 @@ Element List_Get_First(PLIST list)
 	{
 		return NULL;
 	}
+	list->iter = list->head->next;
 	return list->head->data;
 }
 //******************************************************************************
@@ -206,11 +214,11 @@ Element List_Get_Next(PLIST list)
 		printf(ARG_ERR_MSG);
 		return NULL;
 	}
-	PNODE new = list->iter;
-	if (new->next == NULL)
+	if (list->iter == NULL)
 		return NULL;
-	list->iter = new->next;
-	return list->iter->data;
+	PNODE new = list->iter;
+	list->iter= list->iter->next;
+	return new->data;
 }
 //******************************************************************************
 //* function name: List_Duplicate
