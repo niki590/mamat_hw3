@@ -206,9 +206,10 @@ Element List_Get_Next(PLIST list)
 		printf(ARG_ERR_MSG);
 		return NULL;
 	}
-	if (list->iter->next == NULL)
+	PNODE new = list->iter;
+	if (new->next == NULL)
 		return NULL;
-	list->iter = list->iter->next;
+	list->iter = new->next;
 	return list->iter->data;
 }
 //******************************************************************************
