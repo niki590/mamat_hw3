@@ -1,0 +1,19 @@
+4 Add_W W444
+1 Create_B
+3 Add_W W111
+2 Add_W W222
+5 Add_W W333
+6 Print
+Exe
+1 Add_Sq W111 Sq111
+2 Add_Sq W222 Sq222
+3 Add_Sq W333 Sq333
+4 Add_Sq W444 Sq444
+5 Add_Sq W444 Sq111
+6 Print
+Exe
+1 Add_APC W111 Sq111 A111 
+2 Add_APC W111 Sq111 A123
+3 Add_APC W555 Sq111 A000
+7 Print
+Exe

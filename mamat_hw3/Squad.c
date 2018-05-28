@@ -61,8 +61,9 @@ PSQUAD Squad_Create(char *id, Copy_Function copy1, Free_Function free1, Compare_
 //* Parameters: pointer to squad
 //* Return Value: NA
 //******************************************************************************
-void Squad_Delete(PSQUAD squ)
+void Squad_Delete(Element squ_t)
 {
+	PSQUAD squ = (PSQUAD)squ_t;
 	if (squ == NULL)
 	{
 		printf(ARG_ERR_MSG);
@@ -79,8 +80,9 @@ void Squad_Delete(PSQUAD squ)
 //* Parameters: pointer to squad
 //* Return Value: NA
 //******************************************************************************
-void Squad_Print(PSQUAD squ)
+void Squad_Print(Element squ_t)
 {
+	PSQUAD squ = (PSQUAD)squ_t;
 	if (squ == NULL)
 	{
 		printf(ARG_ERR_MSG);
@@ -91,6 +93,7 @@ void Squad_Print(PSQUAD squ)
 	List_Print(squ->apc_list);
 	printf("Soldiers:\n");
 	List_Print(squ->sold_list);
+	printf("\n");
 }
 //******************************************************************************
 //* function name: Squad_Duplicate
@@ -98,8 +101,9 @@ void Squad_Print(PSQUAD squ)
 //* Parameters: pointer to squad
 //* Return Value: pointer to Duplicated squad
 //******************************************************************************
-PSQUAD Squad_Duplicate(PSQUAD old_squ)
+Element Squad_Duplicate(Element old_squ_t)
 {
+	PSQUAD old_squ = (PSQUAD)old_squ_t;
 	if (old_squ == NULL)
 	{
 		printf(ARG_ERR_MSG);
@@ -129,6 +133,7 @@ PSQUAD Squad_Duplicate(PSQUAD old_squ)
 	}
 	return new_squ;
 }
+
 //******************************************************************************
 //* function name: Squad_Add_Soldier
 //* Description : creates a soldier and adds to given squad
@@ -246,8 +251,10 @@ Result Squad_APC_Pop(PSQUAD squ, char* apcID, Pbool mem_failed)
 	else
 	{
 		PSOLDIER popped = APC_Pop(exists);
-		if (popped == NULL)//soldier wasn't popped form apc
+		if (popped == NULL)		//soldier wasn't popped form apc cuz empty
+		{
 			return FAILURE;
+		}
 		else
 		{
 			Result added = List_Add_Elem(squ->sold_list, popped);
@@ -349,12 +356,14 @@ bool Squad_APCExist(PSQUAD squ, char * id)
 	PAPC curr_apc = List_Get_First(squ->apc_list);
 	while (curr_apc != NULL)
 	{
-		if (APC_SoldExist(curr_apc, id))
+		if (APC_Compare(curr_apc,id))
 			return true;
 		curr_apc = List_Get_Next(squ->apc_list);
 	}
 	return false;
 }
+
+
 //******************************************************************************
 //* function name: Squad_Compare
 //* Description : checks if squad given is with name given
@@ -368,6 +377,11 @@ bool Squad_Compare(Element squad_t, Element name_t)
 	if (!strcmp(squad->ID, name))
 		return true;
 	return false;
+}
+
+char* Squad_Name(PSQUAD sq)
+{
+	return sq->ID;
 }
 
 

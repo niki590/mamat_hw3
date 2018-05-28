@@ -226,7 +226,7 @@ Result WarZone_Add_Squad(PWarZone wz, char *id)
 		printf(MALLOC_ERR_MSG);
 		return FAILURE;
 	}
-	if (List_Add_Elem(wz->squ_list, new))
+	if (!List_Add_Elem(wz->squ_list, new))
 	{
 		printf(MALLOC_ERR_MSG);
 		return FAILURE;
@@ -242,7 +242,7 @@ Result WarZone_Add_Squad(PWarZone wz, char *id)
 //******************************************************************************
 void WarZone_Del_Squad(PWarZone wz, char *id)
 {
-	List_Remove_Elem(wz->squ_list, id);
+		List_Remove_Elem(wz->squ_list, id);
 }
 //******************************************************************************
 //* function name: WarZone_Get_Squ_List

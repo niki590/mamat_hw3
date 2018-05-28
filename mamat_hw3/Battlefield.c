@@ -72,7 +72,7 @@ bool Battlefield_Squad_Exist(PLIST battle, char * id)
 	PWarZone zone = List_Get_First(battle);
 	while (zone != NULL)
 	{
-		if (WarZone_Compare(zone, id))
+		if (WarZone_SquadExist(zone, id))
 			return true;
 		zone = List_Get_Next(battle);
 	}
@@ -93,32 +93,28 @@ void Battlefield_Emergency(PLIST bf, PWarZone wz)
 		printf(ARG_ERR_MSG);
 		return;
 	}
-	PWarZone next_wz = NULL;
 	PLIST emer_wz_squ_list = WarZone_Get_Squ_List(wz);
 	char* emer_eze_id = WarZone_Get_ID(wz);
 	PWarZone curr_wz = List_Get_First(bf);
-	bool a = WarZone_Compare(curr_wz, emer_eze_id);
-	while ((curr_wz != NULL) && (!a))
-	{
-		curr_wz = List_Get_Next(bf);
-		a = WarZone_Compare(curr_wz, emer_eze_id);
-	}
 	while (curr_wz != NULL)
 	{
-		next_wz = List_Get_First(bf);
-		if (WarZone_Compare(next_wz, wz))
+		if (WarZone_Compare(curr_wz, emer_eze_id))
 		{
-			next_wz = List_Get_Next(bf);
+			curr_wz = List_Get_Next(bf);
+			if (curr_wz == NULL)
+			{
+				return;
+			}
 		}
-		PLIST squ_list = WarZone_Get_Squ_List(next_wz);
+		PLIST squ_list = WarZone_Get_Squ_List(curr_wz);
 		PSQUAD curr_squ = List_Get_First(squ_list);
 		while (curr_squ != NULL)
 		{
 			List_Add_Elem(emer_wz_squ_list, curr_squ);
-			List_Remove_Elem(squ_list, curr_squ);
+			List_Remove_Elem(squ_list,Squad_Name(curr_squ));
 			curr_squ = List_Get_Next(squ_list);
 		}
-		next_wz = List_Get_Next(bf);
+		curr_wz = List_Get_Next(bf);
 	}
 }
 //******************************************************************************

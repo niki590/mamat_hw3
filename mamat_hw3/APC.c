@@ -126,11 +126,10 @@ void APC_Print(Element nag_t)
 		return;
 	}
 	printf("%s , Occupancy: %d/%d\n", nag->ID, (nag->top) + 1, APC_MAX_Soldiers);
-	int k = (nag->top) + 1;
 	for (int i = 1; i <= (nag->top) + 1; i++)
 	{
 		printf("Seat %d: ", i);
-		Soldier_Print(nag->array[k - i]);
+		Soldier_Print(nag->array[i-1]);
 	}
 }
 //******************************************************************************
